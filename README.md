@@ -3,11 +3,12 @@
 
 ## Descripción
 
-Este proyecto es el resultado de la Práctica 1 de la asignatura _Tipología y ciclo de vida de los datos_, perteneciente al Máster en Ciencia de Datos de la Universitat Oberta de Catalunya.<p>
-La práctica se basa en obtener mediante técnicas de _web scraping_ codificadas bajo el lenguaje de programación Python datos de la web _bonarea.com_ y generar diferentes datasets acorde la elección del usuario. A su vez, se han generado diferentes aplicaciones de los datos obtenidos para mostrar ejemplos de la información que se podría extraer de los mismos.<p>
-  
-**Nota:**
-El informe del proyecto se encuentra tanto en formato docx como en pdf.<p>
+El presente informe forma parte de la segunda  práctica de la asignatura M2.851 - Tipología y ciclo de vida de los datos del Máster Universitario en Ciencia de Datos impartido por la Universitat Oberta de Catalunya.<p>
+
+En esta práctica se realizarán técnicas de limpieza de datos aplicadas a un juego de datos determinado y también se analizarán dichos datos para extraer información relevante y útil.<p>
+
+A su vez, se entregará, junto con la presente memoria, una serie de archivos con el código necesario para la realización de la limpieza y análisis con el que el usuario podrá realizar diferentes estudios analíticos a posteriori si lo desease.<p>
+
 
 ## Miembros del equipo
 
