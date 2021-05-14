@@ -1,5 +1,5 @@
 # M2.851 -TIPOLOGÍA Y CICLO DE VIDA DE LOS DATOS-
-# Práctica 1: Web scraping
+# Práctica 2: Limpieza y análisis de datos
 
 ## Descripción
 
@@ -15,12 +15,8 @@ La actividad ha sido realizada por: **Olga Garcés Ciemerozum** y **Carlos Acost
 
 ## Ficheros del código fuente 
 
-* **get_dataframe.py**: Generador de los diferentes dataframes 'a la carte' a petición del usuario (formato archivo: csv).
-* **get_reports.py**: Generador de las diferentes aplicaciones 'a la carte' a petición del usuario (formato archivo: varios).
-* **main_functions.py**: Contiene la implementación de las diferentes funciones para extraer los datos mediante técnicas de web scraping y la creación de los datasets.
-* **plot_box.py**: Contiene la implementación de la aplicación para crear gráficos box plot con los datos extraídos según carburante y día de la semana.
-* **plot_price_evolution.py**: Contiene la implementación de la aplicación para crear gráficos de evolución del precio según tipo de carburante y gasolinera.
-* **plot_heatmap.py**: Contiene la implementación de la aplicación para crear un heatmap geográfico de los precios según el carburante escogido.
+* **xxx.yyy**: xxxx.
+
 
 
 ## Prerequesitos
@@ -34,35 +30,13 @@ Para la elaboración de la visualización del heatmap, se deberá de disponer de
 ## Instrucciones
 
 Para poder ejecutar directamente este proyecto en tu máquina local, deberás clonar todo el repositorio mediante su dirección url.<p>
-Una vez clonado, para generar los datasets, se debe ejecutar el archivo "get_dataframe.py" y seguir las instrucciones.  
+Una vez clonado, .........
 
-El proyecto puede generar 3 archivos con formato csv que formarán parte del dataset:
-
-1.	Archivo csv “bonarea_gasolineras_prices.csv”: csv actualizable con histórico de precios diarios de los diferentes carburantes disponibles en las gasolineras.
-2.	Archivo csv “bonarea_gasolineras_data_and_prices.csv”: csv actualizable con los datos informativos de las gasolineras e histórico de precios diarios de los diferentes carburantes disponibles.
-3.	Archivo csv “bonarea_establecimientos.csv”: csv con la información descriptiva de todos los establecimientos de BonÀrea.
-
-
-
-Para ejecutar las aplicaciones existentes en el proyecto, se debe ejecutar "get_reports.py" y seguir las instrucciones.
-
-El programa puede generar 4 tipos de gráficas:<p>
-
-* Box plot por día de la semana con los estadísticos de los precios para una única gasolinera.<p>
-* Box plot por día de la semana con los estadísticos de los precios de todas las gasolineras.<p>
-* Gráfico de evolución temporal de los precios de cada producto y por gasolinera.<p>
-* Heatmap geográfico de los precios por producto.<p>
-
-
-
-## Automatización de los datos
-
-Debido a que parte del dataset se debe generar diariamente con los datos de referencia, si se desease automatizar el proceso, se debería crear, de forma local, una aplicación CRON en el sistema operativo (Linux / Mac) o gestionarlo mediante “Scheduled Tasks” de Windows. Dicho proceso sería útil si se mantuviese la máquina operativa 24 h, 7 días a la semana, con lo cual el usuario se podría despreocupar de ejecutar el archivo "get_dataframe.py" cada día.<p>
 
 
 ## Memoria
 
-Este proyecto dispone de una memoria con información exhaustiva y explicaciones en cuanto a la elaboración del dataset. La memoria se dispone en formato docx y pdf en la carpeta "Informe".  
+Este proyecto dispone de una memoria con información exhaustiva y explicaciones en cuanto a la limpieza y análisis del dataset. La memoria se dispone en formato docx y pdf en la carpeta "Informe".  
 
 ## License
 
@@ -70,10 +44,14 @@ Database released under Open Data Commons Open Database License (ODbL) v1.0, ind
 
 ## Recursos
 
-1. Lawson, R. (2015). _Web Scraping with Python_. Packt Publishing Ltd. Chapter 2. Scraping the Data.
-2. Mitchel, R. (2015). _Web Scraping with Python: Collecting Data from the Modern Web_. O'Reilly Media, Inc. Chapter 1. Your First Web Scraper.
-3. Lawson, R. (2015). _Web Scraping with Python_. Packt Publishing Ltd. Chapter 5. Dynamic Data.  
+1.	Calvo M, Subirats L, Pérez D (2019). Introducción a la limpieza y análisis de los datos. Editorial UOC.
+2.	Squire, Megan (2015). Clean Data. Packt Publishing Ltd.
+3.  Jiawei Han, Micheine Kamber, Jian Pei (2012). Data mining: concepts and techniques. Morgan Kaufmann.
+4.	Jason W. Osborne (2010). Data Cleaning Basics: Best Practices in Dealing with Extreme Scores. Newborn and Infant Nursing Reviews; 10 (1): pp. 1527-3369.
+5.	Peter Dalgaard (2008). Introductory statistics with R. Springer Science & Business Media.
+6.	Wes McKinney (2012). Python for Data Analysis. O’Reilley Media, Inc.
+
 
 ## Digital Object Identifier (DOI) del juego de datos
-DOI: 10.5281/zenodo.4671856<p>
-Link: https://doi.org/10.5281/zenodo.4671856
+DOI: xxxx<p>
+Link: xxxx
