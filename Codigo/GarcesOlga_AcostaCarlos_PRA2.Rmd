@@ -34,33 +34,7 @@ options(width = 500)
 
 ```{r load_libraries, message=FALSE, warning=FALSE, include=FALSE}
 # Cargamos las librerias de  R que vamos a usar
-# library(DT) # Para visualizar tablas
-# library(readr)
-# library(plyr)
-# library (MASS)
-# library(ggpubr) # Para QQ plot
-# library(ggplot2) # Para graficos
-# library(stringr) #Para str_to_title()
-# library(reshape) #Para Pivot Tables
-# library(VIM) # Para kNN
-# library(psych) # Para Grafico Correlaciones
-# library(pastecs) #Para tabla resumen cuantitativa
-# library(gmodels) #Para tabla resumen cualiativa
-# library(knitr) #Para Kable
-# library(kableExtra) #Para Kable
-# library(hrbrthemes) #Para gráficos densidades
-# library(dplyr) #Para gráficos densidades
-# library(vioplot) #Para gráficos violin
-# library(PASWR) #Estadístico z
-# library(BSDA) #Estadístico z.test
-# library(lsr) #Eta2
-# library(faraway) #Multicolinealidad
-# library(gridExtra) #Grid graficas
-# library(corrplot) #Plot para correlaciones
-# library(ResourceSelection) #Hosmer Lemeshowi
-# library(InformationValue) #ROC
-# library(plotROC)#ROC
-# library(DescTools) #Scheffe test
+# 
 ```
 
 <br><br><br>
