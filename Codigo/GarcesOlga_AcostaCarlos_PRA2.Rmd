@@ -28,6 +28,7 @@ options(width = 500)
 
 <br><br><br>
 
+CHANGE HERE
 ******
 # **Carga de librerias**
 ******
@@ -53,6 +54,10 @@ df <- read.csv("Carseats.csv")
 # Estructura del archivo que contiene el dataframe
 str(df)
 ```
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Primeras líneas de los datos
+head(df)
+```
 
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
@@ -61,6 +66,7 @@ str(df)
 df$ShelveLoc <- as.factor(df$ShelveLoc)
 df$Urban <- as.factor(df$Urban)
 df$US <- as.factor(df$US)
+df$Education <- factor(df$Education, levels = c(10, 11, 12, 13, 14, 15, 16, 17, 18))
 
 ```
 
@@ -83,20 +89,62 @@ summary(df[8])
 summary(df[9])
 summary(df[10])
 summary(df[11])
+
+# Alternativa más corta en código
+sapply(df, summary)
+```
+```{r }
+#install.packages("ISLR")
+library("ISLR")
+#install.packages("SmartEDA")
+library("SmartEDA")
 ```
 
+```{r }
+# Overview of the data - Type = 1
+ExpData(data=carseats,type=1)
+
+# Structure of the data - Type = 2
+ExpData(data=carseats,type=2)
+
+```
 
 ******
 # **Integración y selección de los datos**
 ******
 
-
+OLGA: esto lo he hecho más arriba con df$Education <- factor(df$Education, levels = c(10, 11, 12, 13, 14, 15, 16, 17, 18)) para asegurar que se respetan los niveles
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 # Creación variable categórica basada en Education.
 df$Education_cat <- as.factor(df$Education)
 summary(df$Education_cat)
 ```
 
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+df$SalesValue <- df$Sales*df$Price
+df$Profit <- df$Sales*df$Price - df$Advertising*1000
+
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+
+```
 
 
 ******
