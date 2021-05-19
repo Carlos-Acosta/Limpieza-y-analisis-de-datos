@@ -14,15 +14,49 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
 ```{r cars}
-summary(cars)
+carseats <- read.csv("./Dataset/Carseats.csv")
 ```
 
 ## Including Plots
 
 You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r }
+#install.packages("ISLR")
+library("ISLR")
+#install.packages("SmartEDA")
+library("SmartEDA")
 ```
+
+```{r }
+# Overview of the data - Type = 1
+ExpData(data=carseats,type=1)
+
+# Structure of the data - Type = 2
+ExpData(data=carseats,type=2)
+
+```
+
+
+```{r }
+dim(carseats[is.null(carseats$Sales),])
+sapply(colnames(carseats), is.null)
+for (col in colnames(carseats)) {
+  if (dim(carseats[is.null(carseats[col]),])[1] >0) {
+    print(carseats[is.null(carseats[col]),])
+  }
+  else {
+    print(paste(col, ": No hemos encontrado valores nulos"))
+  }
+  
+}
+
+```
+
+
+```{r }
+```
+
+
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
