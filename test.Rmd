@@ -15,6 +15,7 @@ When you click the **Knit** button a document will be generated that includes bo
 
 ```{r cars}
 carseats <- read.csv("./Dataset/Carseats.csv")
+
 ```
 
 ## Including Plots
@@ -55,8 +56,71 @@ for (col in colnames(carseats)) {
 
 
 ```{r }
+library(fitdistrplus)
+visualiz <- function(D, title){
+oldpar = par(mfrow = c(2,2), mar=c(2,2,2,2))
+truehist(D, main = title)
+abline(v = mean(D), col="red", lwd=3, lty=2);
+abline(v = median(D), lwd=3, lty=2, col="blue");
+qqnorm(D, main = title);qqline(D, col = 2 )
+boxplot(D~carseats$ShelveLoc, main = title)
+}
 ```
 
 
+```{r }
+visualiz(carseats$Price,  "precio")
+```
+
+
+```{r }
+visualiz1 <- function(D1, D2, name1, name2, title){
+oldpar = par(mfrow = c(2,2), mar=c(2,2,2,2))
+truehist(D1, main = paste(name1," ", title))
+abline(v = mean(D1), col="red", lwd=3, lty=2);
+abline(v = median(D1), lwd=3, lty=2, col="blue");
+qqnorm(D1, main = paste(name1, " ", title));qqline(D1, col = 2 )
+truehist(D2, main = paste(name2," ", title))
+abline(v = mean(D2), col="red", lwd=3, lty=2);
+abline(v = median(D2), lwd=3, lty=2, col="blue");
+qqnorm(D2, main = paste(name2," ", title)); qqline(D2, col = 2 )
+}
+```
+
+
+```{r }
+visualiz1(carseats$Price, carseats$CompPrice, "price", "price competition", "Price vs competition")
+```
+
+
+```{r}
+library(ggplot2)
+ggplot(data=carseats, aes(x=US, fill=as.factor(Urban)))+geom_bar(position = 'fill')+facet_wrap(~ShelveLoc)+ scale_fill_manual(values=c("#008000", "black"))
+
+ggplot(data=carseats, aes(x=Education, fill=as.factor(US)))+geom_bar(position = 'fill')+facet_wrap(~ShelveLoc)+ scale_fill_manual(values=c("#008000", "black", "red"))
+
+ggplot(data=carseats, aes(x=Education, fill=as.factor(ShelveLoc)))+geom_bar(position = 'fill')+facet_wrap(~US)+ scale_fill_manual(values=c("#008000", "black", "red"))
+```
+
+
+```{r}
+colnames(carseats)
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
