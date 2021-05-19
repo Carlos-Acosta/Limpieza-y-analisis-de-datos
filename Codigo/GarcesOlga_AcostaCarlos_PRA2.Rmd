@@ -1,0 +1,202 @@
+---
+title: "**M2.851 – TIPOLOGÍA Y CICLO DE VIDA DE LOS DATOS: PRA 2**"
+author: "Olga Garcés Ciemerozum / Carlos Acosta Quintas"
+date: 'Junio 2021'
+output:
+  html_document:
+    highlight: default
+    number_sections: yes
+    theme: cosmo
+    toc: yes
+    toc_depth: 4
+
+     
+---
+
+<style>
+body {
+text-align: justify}
+</style>
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.align="center")
+options(width = 500)
+
+```
+
+<br><br><br>
+
+******
+# **Carga de librerias**
+******
+
+```{r load_libraries, message=FALSE, warning=FALSE, include=FALSE}
+# Cargamos las librerias de  R que vamos a usar
+# 
+```
+
+<br><br><br>
+
+
+******
+# **Descripción del dataset**
+******
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Carga del archivo que contiene el dataframe
+df <- read.csv("Carseats.csv")
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Estructura del archivo que contiene el dataframe
+str(df)
+```
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Sustitución de las variables tipo char por variables categóricas.
+
+df$ShelveLoc <- as.factor(df$ShelveLoc)
+df$Urban <- as.factor(df$Urban)
+df$US <- as.factor(df$US)
+
+```
+
+
+
+
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+
+# Exploración del resumen de los datos de las variables del dataframe 
+summary(df[1])
+summary(df[2])
+summary(df[3])
+summary(df[4])
+summary(df[5])
+summary(df[6])
+summary(df[7])
+summary(df[8])
+summary(df[9])
+summary(df[10])
+summary(df[11])
+```
+
+
+******
+# **Integración y selección de los datos**
+******
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Creación variable categórica basada en Education.
+df$Education_cat <- as.factor(df$Education)
+summary(df$Education_cat)
+```
+
+
+
+******
+# **Limpieza de datos**
+******
+
+## **Datos con ceros o vacíos**
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Comprobacion registros nulos.
+sum(is.na(df))
+```
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Comprobacion registros iguales a cero.
+
+# IMPLEMENTAR FUNCION
+```
+
+## **Datos con valores extremos**
+
+
+
+```{r , fig.height=4, fig.width=6}
+# Boxplot variable Sales
+boxplot(df$Sales, main="Boxplot Variable Sales",ylab="Dólares")
+boxplot.stats(df$Sales, coef = 1.5, do.conf = TRUE, do.out = TRUE)
+```
+
+
+```{r , fig.height=4, fig.width=6}
+# Boxplot variable CompPrice
+boxplot(df$CompPrice, main="Boxplot Variable CompPrice",ylab="Dólares")
+boxplot.stats(df$CompPrice, coef = 1.5, do.conf = TRUE, do.out = TRUE)
+```
+
+
+```{r , fig.height=4, fig.width=6}
+# Boxplot variable Income
+boxplot(df$Income, main="Boxplot Variable Income",ylab="Dólares")
+boxplot.stats(df$Income, coef = 1.5, do.conf = TRUE, do.out = TRUE)
+```
+
+```{r , fig.height=4, fig.width=6}
+# Boxplot variable Advertising
+boxplot(df$Advertising, main="Boxplot Variable Advertising",ylab="Dólares")
+boxplot.stats(df$Advertising, coef = 1.5, do.conf = TRUE, do.out = TRUE)
+```
+
+
+```{r , fig.height=4, fig.width=6}
+# Boxplot variable Population
+boxplot(df$Population, main="Boxplot Variable Population",ylab="Personas (miles)")
+boxplot.stats(df$Population, coef = 1.5, do.conf = TRUE, do.out = TRUE)
+```
+
+```{r , fig.height=4, fig.width=6}
+# Boxplot variable Price
+boxplot(df$Price, main="Boxplot Variable Price",ylab="Dólares")
+boxplot.stats(df$Price, coef = 1.5, do.conf = TRUE, do.out = TRUE)
+```
+
+
+```{r , fig.height=4, fig.width=6}
+# Boxplot variable Age
+boxplot(df$Age, main="Boxplot Variable Age",ylab="Edad (años)")
+boxplot.stats(df$Age, coef = 1.5, do.conf = TRUE, do.out = TRUE)
+```
+
+
+
+
+******
+# **Análisis de datos**
+******
+
+
+
+******
+# **Representación de resultados**
+******
+
+
+
+******
+# **Resolución del problema**
+******
+
+
+******
+# **Creación del archivo preprocesado**
+******
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Guardamos el archivo con el nombre Carseats_processed.csv
+write.csv(df, "Carseats_processed.csv", row.names = FALSE)
+```
+
+
+<br>
+
+
