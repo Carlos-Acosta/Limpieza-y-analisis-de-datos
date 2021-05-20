@@ -35,7 +35,36 @@ CHANGE HERE
 
 ```{r load_libraries, message=FALSE, warning=FALSE, include=FALSE}
 # Cargamos las librerias de  R que vamos a usar
-# 
+library("ISLR")
+library("SmartEDA")
+library("tidyverse")
+library(DT) # Para visualizar tablas
+library(readr)
+library(plyr)
+library (MASS)
+library(ggpubr) # Para QQ plot
+library(ggplot2) # Para graficos
+# library(stringr) #Para str_to_title()
+# library(reshape) #Para Pivot Tables
+# library(VIM) # Para kNN
+library(psych) # Para Grafico Correlaciones
+library(pastecs) #Para tabla resumen cuantitativa
+library(gmodels) #Para tabla resumen cualiativa
+library(knitr) #Para Kable
+library(kableExtra) #Para Kable
+library(hrbrthemes) #Para gráficos densidades
+library(dplyr) #Para gráficos densidades
+library(vioplot) #Para gráficos violin
+library(PASWR) #Estadístico z
+library(BSDA) #Estadístico z.test
+library(lsr) #Eta2
+library(faraway) #Multicolinealidad
+library(gridExtra) #Grid graficas
+library(corrplot) #Plot para correlaciones
+library(ResourceSelection) #Hosmer Lemeshowi
+library(InformationValue) #ROC
+library(plotROC)#ROC
+library(DescTools) #Scheffe test
 ```
 
 <br><br><br>
@@ -71,41 +100,18 @@ df$Education <- factor(df$Education, levels = c(10, 11, 12, 13, 14, 15, 16, 17, 
 ```
 
 
-
-
-
-
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-
 # Exploración del resumen de los datos de las variables del dataframe 
-summary(df[1])
-summary(df[2])
-summary(df[3])
-summary(df[4])
-summary(df[5])
-summary(df[6])
-summary(df[7])
-summary(df[8])
-summary(df[9])
-summary(df[10])
-summary(df[11])
-
-# Alternativa más corta en código
 sapply(df, summary)
 ```
-```{r }
-#install.packages("ISLR")
-library("ISLR")
-#install.packages("SmartEDA")
-library("SmartEDA")
-```
+
 
 ```{r }
 # Overview of the data - Type = 1
-ExpData(data=carseats,type=1)
+ExpData(data=df,type=1)
 
 # Structure of the data - Type = 2
-ExpData(data=carseats,type=2)
+ExpData(data=df,type=2)
 
 ```
 
@@ -113,17 +119,91 @@ ExpData(data=carseats,type=2)
 # **Integración y selección de los datos**
 ******
 
-OLGA: esto lo he hecho más arriba con df$Education <- factor(df$Education, levels = c(10, 11, 12, 13, 14, 15, 16, 17, 18)) para asegurar que se respetan los niveles
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-# Creación variable categórica basada en Education.
-df$Education_cat <- as.factor(df$Education)
-summary(df$Education_cat)
+
+## **Integración de los Datos**
+
+
+
+
+
+## **Selección de los Datos**
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE, include=TRUE}
+# Creación tabla con describe()
+col_var_cuantitativa_sin_ID <- c("Sales", "CompPrice", "Income", "Advertising", "Population", "Price", "Age")
+
+df_var_cuantitativa <- df[, col_var_cuantitativa_sin_ID]
+
+df_var_cuantitativa_tabla <- describe(df_var_cuantitativa, quant = TRUE, IQR = TRUE)
+
+# Eliminación campos no usables
+df_var_cuantitativa_tabla <- df_var_cuantitativa_tabla[, -c(1, 2, 6, 7, 8, 9, 10, 11, 12, 13, 15)]
+
+# Cambio de nombres de los campos
+colnames(df_var_cuantitativa_tabla) <- c("Mean", "St_Dev", "Median","IQR")
+
+# Transpuesta de la matriz
+df_var_cuantitativa_tabla <- data.frame(t(df_var_cuantitativa_tabla))
+df_var_cuantitativa_tabla
 ```
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Selección/Filtrado de las instancias que solamente pertenecen a US
+# Creación de la tabla mediante kable()
+
+# Formato numérico no científico
+options(scipen = 999)
+
+# Variables auxiliares para la creación de la tabla kable() de forma más automática.
+# Dimensiones de cada grupo de la tabla
+dim_grupo1 = 4
+
+
+# Límites de las posiciones de los grupos (automatico)
+dim1_i <- 1
+dim1_f <- dim_grupo1
+
+
+# Formato de la tabla mediante función kable()
+# Formato de los dígitos de los campos
+# Creación del título de la tabla y anotación
+kable(df_var_cuantitativa_tabla, digits = c(2, 2, 2, 2, 2, 2, 2), caption = "TABLA RESUMEN DE LAS VARIABLES CUANTITATIVAS (Total observaciones: 400)
+            __________________________________________________________________________________
+      <p>   Sales:         Ventas unitarias, en miles, en cada ubicación
+      <p>   CompPrice:     Precio que cobra el competidor en cada ubicación
+      <p>   Income:        Nivel de ingresos comunitarios, en miles de dólares
+      <p>   Advertising:   Presupuesto de publicidad local de la empresa en cada ubicación, en miles de dólares
+      <p>   Population:    Tamaño de la población en la región, en miles
+      <p>   Price:         Precio del producto en cada ubicación
+      <p>   Age:           Edad media de la población local") %>%
+  
+  kable_styling("striped",  full_width = T) %>%
+  pack_rows("Datos Cuantitativos",
+            dim1_i,
+            dim1_f,
+            label_row_css = "background-color: #666; color: #fff;")
+```
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Boxplot Advertising
+boxplot(df$Advertising)
+```
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Selección/Filtrado de las instancias que solamente pertenecen a US
+df <- filter(df, US=="Yes")
+df
+```
+
+
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 df$SalesValue <- df$Sales*df$Price
 df$Profit <- df$Sales*df$Price - df$Advertising*1000
-
 ```
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
