@@ -145,7 +145,7 @@ colnames(df_var_cuantitativa_tabla) <- c("Mean", "St_Dev", "Median","IQR")
 
 # Transpuesta de la matriz
 df_var_cuantitativa_tabla <- data.frame(t(df_var_cuantitativa_tabla))
-df_var_cuantitativa_tabla
+#instadf_var_cuantitativa_tabla
 ```
 
 
@@ -254,12 +254,40 @@ sum(is.na(df))
 boxplot(df$Sales, main="Boxplot Variable Sales",ylab="Dólares")
 boxplot.stats(df$Sales, coef = 1.5, do.conf = TRUE, do.out = TRUE)
 ```
+OLGA: hola Carlos. Me parece que hacer los boxplots cada uno en su caja es muy grande y largo de hacer scroll down. Te propongo una alternativa con los boxplots juntos en una rejilla. Creo que se ve lo bastante bien. Aparte imprime las estadísticas del boxplot.  
 
+```{r, fig.height=4, fig.width=8}
 
-```{r , fig.height=4, fig.width=6}
+oldpar = par(mfrow = c(2,3), mar=c(2,2,2,2))
 # Boxplot variable CompPrice
 boxplot(df$CompPrice, main="Boxplot Variable CompPrice",ylab="Dólares")
+print("Boxplot Stats CompPrice\n")
 boxplot.stats(df$CompPrice, coef = 1.5, do.conf = TRUE, do.out = TRUE)
+
+# Boxplot variable Income
+boxplot(df$Income, main="Boxplot Variable Income",ylab="Dólares")
+print("Boxplot Stats Variable Income\n")
+boxplot.stats(df$Income, coef = 1.5, do.conf = TRUE, do.out = TRUE)
+
+# Boxplot variable Advertising
+boxplot(df$Advertising, main="Boxplot Variable Advertising",ylab="Dólares")
+print("Boxplot Stats Variable Advertising\n")
+boxplot.stats(df$Advertising, coef = 1.5, do.conf = TRUE, do.out = TRUE)
+
+# Boxplot variable Population
+boxplot(df$Population, main="Boxplot Variable Population",ylab="Personas (miles)")
+print("Boxplot Stats Variable Population\n")
+boxplot.stats(df$Population, coef = 1.5, do.conf = TRUE, do.out = TRUE)
+
+# Boxplot variable Price
+boxplot(df$Price, main="Boxplot Variable Price",ylab="Dólares")
+print("Boxplot Stats Variable Price\n")
+boxplot.stats(df$Price, coef = 1.5, do.conf = TRUE, do.out = TRUE)
+
+# Boxplot variable Age
+boxplot(df$Age, main="Boxplot Variable Age",ylab="Edad (años)")
+print("Boxplot Stats Variable Age\n")
+boxplot.stats(df$Age, coef = 1.5, do.conf = TRUE, do.out = TRUE)
 ```
 
 

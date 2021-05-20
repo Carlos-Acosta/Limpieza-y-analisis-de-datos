@@ -69,7 +69,7 @@ boxplot(D~carseats$ShelveLoc, main = title)
 
 
 ```{r }
-visualiz(carseats$Price,  "precio")
+visualiz(carseats$Age,  "precio")
 ```
 
 
