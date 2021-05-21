@@ -88,6 +88,26 @@ str(df)
 head(df)
 ```
 
+El dataset está compuesto por las variables:  
+
+**Sales** (Ventas unitarias, en miles de dólares, en cada ubicación)   
+**CompPrice** (Precio del producto en dólares que cobra el competidor en cada ubicación)   
+**Income** (Nivel de ingresos comunitarios, en miles de dólares)   
+**Advertising** (Presupuesto de publicidad local de la empresa en cada ubicación, en miles de dólares)   
+**Population** (Tamaño de la población en la región, en miles)  
+**Price** (Precio del producto en dólares en cada ubicación)   
+**ShelveLoc** (Una clasificación clasificando el dato entre Bad, Good y Medium que indica la calidad de la ubicación del producto en los puntos de venta)   
+**Age** (Edad media de la población local)   
+**Education** (Nivel educativo)   
+**Urban** (Una clasificación clasificando el dato entre los niveles Yes y No, que indica si la tienda está en una ubicación rural o urbana)   
+**US** (Una clasificación clasificando el dato entre Yes y No para indicar si la tienda se encuentra en USA o no).   
+
+OLGA : INTEGRACIÓN: comprobamos si la base de datos contiene registros duplicados. Para ello usamos la función `duplicated`. Concluimos que no existen registros dupicados en los datos.
+```{r}
+df[duplicated(df),]
+```
+
+Realizamos un análisis general de los datos que nos permite ver el tipo de variable, los valores perdidos por columna y el porcentaje de los mismos sobre el total de valores de la columna. También podemos ver cuántos valores únicos puede tomar cada variable.  
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 # Sustitución de las variables tipo char por variables categóricas.
@@ -123,10 +143,36 @@ ExpData(data=df,type=2)
 ## **Integración de los Datos**
 
 
+OLGA: Las variables ShelveLoc, Urban, US son variables categóricas. El programa las ha interpretado como character. Corregimos esto aplicando la función `as.factor`y sobreescribimos las variables originales.  
 
+La variable Education también es una variable categórica, en este caso es categórica ordinal ya que existe un órden entre distintos niveles de educación. Guardamos esta variable como factor y le asignamos niveles ordenados.  
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Sustitución de las variables tipo char por variables categóricas.
+
+df$ShelveLoc <- factor(df$ShelveLoc, levels = c("Bad", "Medium", "Good"))
+df$Urban <- as.factor(df$Urban)
+df$US <- as.factor(df$US)
+df$Education <- factor(df$Education, levels = c(10, 11, 12, 13, 14, 15, 16, 17, 18))
+
+```
+**OLGA:** si crees que cualquiera de las variables que he puesto no necesita estar en miles, lo puedes cambiar.  
+OLGA: Las variables Sales, Income, Advertising, Population vienen representadas en miles de dólares. Multiplicamos todas estas variables por 1000 y sobreescribimos los datos.  
+
+```{r}
+vars.miles <- c("Sales", "Income", "Advertising", "Population")
+df[vars.miles] <- df[vars.miles] * 1000
+```
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Exploración del resumen de los datos de las variables del dataframe 
+sapply(df, summary)
+```
 
 
 ## **Selección de los Datos**
+
+
 
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, include=TRUE}
@@ -187,6 +233,62 @@ kable(df_var_cuantitativa_tabla, digits = c(2, 2, 2, 2, 2, 2, 2), caption = "TAB
 ```
 
 
+
+
+Creamos una función par poder visualizar los histogramas de las distintas variables, qqplots y boxplots (de todo el rango o en función de los valores que tome otra variable)
+
+```{r }
+library(fitdistrplus)
+visualiz <- function(colm, facet.colm, title, facetPlot=FALSE){
+oldpar = par(mfrow = c(2,2), mar=c(2,2,2,2))
+truehist(df[[colm]], main = title)
+abline(v = mean(df[[colm]]), col="red", lwd=3, lty=2);
+abline(v = median(df[[colm]]), lwd=3, lty=2, col="blue");
+qqnorm(df[[colm]], main = title);qqline(df[[colm]], col = 2 )
+if (facetPlot==TRUE) {
+  boxplot(df[[colm]]~df[[facet.colm]], main = title)
+}
+
+boxplot(df[[colm]], main = title)
+}
+```
+
+
+```{r }
+visualiz("Sales", "ShelveLoc", "Ventas por Ubicación en estantería")
+```
+
+
+**OLGA:** En lugar de un solo boxplot sugiero varias cosas:  
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Boxplot Advertising
+boxplot(df$Advertising)
+
+visualiz("Advertising", "Age", "Publicidad por edad promedio de la población")
+```
+
+OLGA: Función para visualizar boxplots agrupados por alguna variable
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+facet.box <- function(colm, facet){
+  boxplot(df[[colm]]~df[[facet]], main = paste(colm, "para distintos niveles de", facet))
+}
+
+```
+
+OLGA: Seleccionamos unas columnas que consideramos pueden tener influencia sobre las ventas de sillitas.  
+```{r}
+cols.facet <- c("Advertising", "Price", "ShelveLoc", "Age", "Education", "Urban", "US")
+oldpar = par(mfrow = c(2,2), mar=c(2,2,2,2))
+for (colm in cols.facet) {
+  
+  facet.box("Sales", colm)
+
+  }
+
+```
+
+
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 # Boxplot Advertising
 boxplot(df$Advertising)
@@ -200,11 +302,45 @@ df
 ```
 
 
+Creación de nuevas variables.  
+
+Cremos una variable dicotómica que indica con 1 si la competencia tiene mayor precio unitario y 0 para el caso contrario
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+df$Higher.price.comp <- ifelse(df$CompPrice >df$Price, 1, 0)
+```
+
+Creamos una variable que representa el importe de las ventas en cierto punto de ventas y otra variable que prepresenta el el beneficio (importe de las ventas menos publicidad)
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 df$SalesValue <- df$Sales*df$Price
 df$Profit <- df$Sales*df$Price - df$Advertising*1000
+df$Avg.income.person <- df$Income / df$Population
 ```
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+facet.box("SalesValue", "Age")
+facet.box("SalesValue", "Education")
+facet.box("SalesValue", "Urban")
+facet.box("SalesValue", "ShelveLoc")
+facet.box("Sales", "ShelveLoc")
+facet.box("Sales", "Age")
+
+facet.box("Profit", "Age")
+facet.box("Profit", "Education")
+facet.box("Profit", "ShelveLoc")
+facet.box("Profit", "Urban")
+facet.box("Profit", "Higher.price.comp")
+
+facet.box("SalesValue", "Advertising")
+facet.box("Sales", "Advertising")
+```
+OLGA: El beneficio es casi siempre negativo. Podemos filtrar por los valores de beneficio negativos para ver si tienen alguna característica en otras cosas
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+visualiz("Profit", "ShelveLoc", "Profit", facetPlot=TRUE)
+```
+
+
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 
@@ -237,6 +373,16 @@ df$Profit <- df$Sales*df$Price - df$Advertising*1000
 # Comprobacion registros nulos.
 sum(is.na(df))
 ```
+
+
+Para cada columna visualizamos los valores únicos y ordenados de menor a mayor. La variable Advertising tiene valores iguales a cero. No existen valores cero ni NA en ninguna otra columna. 
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Comprobacion registros iguales a cero.
+sapply(sapply(df, unique), sort)
+# IMPLEMENTAR FUNCION
+```
+
 
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
@@ -293,36 +439,50 @@ boxplot.stats(df$Age, coef = 1.5, do.conf = TRUE, do.out = TRUE)
 ```
 
 
-```{r , fig.height=4, fig.width=6}
-# Boxplot variable Income
-boxplot(df$Income, main="Boxplot Variable Income",ylab="Dólares")
-boxplot.stats(df$Income, coef = 1.5, do.conf = TRUE, do.out = TRUE)
-```
-
-```{r , fig.height=4, fig.width=6}
-# Boxplot variable Advertising
-boxplot(df$Advertising, main="Boxplot Variable Advertising",ylab="Dólares")
-boxplot.stats(df$Advertising, coef = 1.5, do.conf = TRUE, do.out = TRUE)
-```
 
 
-```{r , fig.height=4, fig.width=6}
-# Boxplot variable Population
-boxplot(df$Population, main="Boxplot Variable Population",ylab="Personas (miles)")
-boxplot.stats(df$Population, coef = 1.5, do.conf = TRUE, do.out = TRUE)
-```
 
-```{r , fig.height=4, fig.width=6}
-# Boxplot variable Price
-boxplot(df$Price, main="Boxplot Variable Price",ylab="Dólares")
-boxplot.stats(df$Price, coef = 1.5, do.conf = TRUE, do.out = TRUE)
+
+
+
+
+
+
+```{r}
+library(ggplot2)
+scatter.viz <- function(x, y, tag.col, color.col) {
+  ggplot(data=df,  aes(x = x, y = y,  label = tag.col)) + 
+  geom_point() + 
+  #scale_colour_manual(values = c("blue", "green", "yellow", "red")) +
+  geom_text(aes(color = color.col), hjust=1.1, vjust=1.1, size = 5) +
+  labs(title = "Google", x = "Correlation Coefficient", y = "Top-Box %")
+  
+}
+
 ```
 
 
-```{r , fig.height=4, fig.width=6}
-# Boxplot variable Age
-boxplot(df$Age, main="Boxplot Variable Age",ylab="Edad (años)")
-boxplot.stats(df$Age, coef = 1.5, do.conf = TRUE, do.out = TRUE)
+```{r}
+scatter.viz(df$CompPrice, df$Price, df$Urban, df$Education)
+```
+
+```{r}
+scatter.viz(df$ShelveLoc, df$Advertising, df$Urban, df$Age)
+```
+
+
+```{r}
+scatter.viz(df$CompPrice, df$Price, df$Urban, df$Education)
+```
+
+
+```{r}
+scatter.viz(df$CompPrice, df$Price, df$Urban, df$Education)
+```
+
+
+```{r}
+scatter.viz(df$CompPrice, df$Price, df$Urban, df$Education)
 ```
 
 
