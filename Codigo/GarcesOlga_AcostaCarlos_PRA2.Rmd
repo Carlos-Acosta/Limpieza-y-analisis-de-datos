@@ -28,7 +28,7 @@ options(width = 500)
 
 <br><br><br>
 
-CHANGE HERE
+
 ******
 # **Carga de librerias**
 ******
@@ -255,6 +255,8 @@ boxplot(df$Sales, main="Boxplot Variable Sales",ylab="Dólares")
 boxplot.stats(df$Sales, coef = 1.5, do.conf = TRUE, do.out = TRUE)
 ```
 OLGA: hola Carlos. Me parece que hacer los boxplots cada uno en su caja es muy grande y largo de hacer scroll down. Te propongo una alternativa con los boxplots juntos en una rejilla. Creo que se ve lo bastante bien. Aparte imprime las estadísticas del boxplot.  
+
+CARLOS: Hi, todo lo que sea mejorar aspecto o presentación, por mi sin problema, puedes borrar y ponerlo todo como veas mejor, no te preocupes si borrar mi código, lo tengo todo en copia de seguridad.... puedes modificar lo que quieras!
 
 ```{r, fig.height=4, fig.width=8}
 
