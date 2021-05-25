@@ -556,6 +556,20 @@ sum(is.na(df_total_sin_etiqueta$Age))</code></pre>
 <pre><code>## [1] 0</code></pre>
 <pre class="r"><code># Guardamos el archivo con el nombre Titanic_processed.csv
 write.csv(df_total_sin_etiqueta, &quot;aaa.csv&quot;, row.names = FALSE)</code></pre>
+<pre class="r"><code># Exploración del resumen de los datos de la varibale Embarked 
+df_total_sin_etiqueta$Embarked &lt;- as.factor(df_total_sin_etiqueta$Embarked)
+summary(df_total_sin_etiqueta$Embarked)</code></pre>
+<pre><code>##       C   Q   S 
+##   2 270 123 914</code></pre>
+<pre class="r"><code># Imputación clase mayoritaria a variable Embarked 
+df_total_sin_etiqueta$Embarked[df_total_sin_etiqueta$Embarked == &quot;&quot;] &lt;- &quot;S&quot;
+summary(df_total_sin_etiqueta$Embarked)</code></pre>
+<pre><code>##       C   Q   S 
+##   0 270 123 916</code></pre>
+<pre class="r"><code># Imputación a variable Unit.price 
+bbb &lt;- df_total_sin_etiqueta$Unit.price [df_total_sin_etiqueta$Unit.price == &quot;&quot;]
+bbb</code></pre>
+<pre><code>## numeric(0)</code></pre>
 </div>
 <div id="datos-con-valores-extremos" class="section level2">
 <h2><span class="header-section-number">3.2</span> <strong>Datos con valores extremos</strong></h2>

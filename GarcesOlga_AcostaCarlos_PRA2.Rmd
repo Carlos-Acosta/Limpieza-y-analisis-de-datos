@@ -221,6 +221,28 @@ sum(is.na(df_total_sin_etiqueta$Age))
 write.csv(df_total_sin_etiqueta, "aaa.csv", row.names = FALSE)
 ```
 
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Exploración del resumen de los datos de la varibale Embarked 
+df_total_sin_etiqueta$Embarked <- as.factor(df_total_sin_etiqueta$Embarked)
+summary(df_total_sin_etiqueta$Embarked)
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Imputación clase mayoritaria a variable Embarked 
+df_total_sin_etiqueta$Embarked[df_total_sin_etiqueta$Embarked == ""] <- "S"
+summary(df_total_sin_etiqueta$Embarked)
+```
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Imputación a variable Unit.price 
+bbb <- df_total_sin_etiqueta$Unit.price [df_total_sin_etiqueta$Unit.price == ""]
+bbb
+```
+
+
 ## **Datos con valores extremos**
 
 
