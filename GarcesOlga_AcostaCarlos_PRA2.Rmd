@@ -1,0 +1,322 @@
+---
+title: "**M2.851 – TIPOLOGÍA Y CICLO DE VIDA DE LOS DATOS: PRA 2**"
+author: "Olga Garcés Ciemerozum / Carlos Acosta Quintas"
+date: 'Junio 2021'
+output:
+  html_document:
+    highlight: default
+    number_sections: yes
+    theme: cosmo
+    toc: yes
+    toc_depth: 4
+
+     
+---
+
+<style>
+body {
+text-align: justify}
+</style>
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.align="center")
+options(width = 500)
+
+```
+
+<br><br><br>
+
+
+```{r load_libraries, message=FALSE, warning=FALSE, include=FALSE}
+# Cargamos las librerias de  R que vamos a usar
+library("ISLR")
+library("SmartEDA")
+library("tidyverse")
+library(DT) # Para visualizar tablas
+library(VIM)
+library(readr)
+library(plyr)
+library (MASS)
+library(ggpubr) # Para QQ plot
+library(ggplot2) # Para graficos
+# library(stringr) #Para str_to_title()
+# library(reshape) #Para Pivot Tables
+# library(VIM) # Para kNN
+library(psych) # Para Grafico Correlaciones
+library(pastecs) #Para tabla resumen cuantitativa
+library(gmodels) #Para tabla resumen cualiativa
+library(knitr) #Para Kable
+library(kableExtra) #Para Kable
+library(hrbrthemes) #Para gráficos densidades
+library(dplyr) #Para gráficos densidades
+library(vioplot) #Para gráficos violin
+library(PASWR) #Estadístico z
+library(BSDA) #Estadístico z.test
+library(lsr) #Eta2
+library(faraway) #Multicolinealidad
+library(gridExtra) #Grid graficas
+library(corrplot) #Plot para correlaciones
+library(ResourceSelection) #Hosmer Lemeshowi
+library(InformationValue) #ROC
+library(plotROC)#ROC
+library(DescTools) #Scheffe test
+```
+
+<br><br><br>
+
+
+******
+# **Descripción del dataset**
+******
+
+El dataset Titanic reune los datos sobre los pasajeros que viajaban a bordo del Titanic y registra para cada persona su supervivencia o no en el accidente. El Titanic tranportaba a pasajeros con gran diversidad en sus niveles de renta y edad y a bordo se encontraban familias enteras.<p>
+
+En el dataset tenemos constancia de la edad y el nivel de renta de los viajeros, y pensamos que está muy asociado a la clase en la que viajaban las personas.<p> 
+
+Este dataset es importante porque nos permite estudiar cuáles son los factores que pueden aumentar la posibilidad de supervivencia de personas que se encuentren en situaciones similares. Estos factores intuimos que pueden ser el estatus social, el sexo, la edad y también tener familiares cerca. Asimismo podemos ver si las pautas marcadas por la sociedad de "mujeres y niños primero" se cumplen cuando las personas se encuentran en situaciones de estres extremo.<p>
+
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Carga de los archivos que contienen los datos del train y test
+test <- read.csv("titanic/test.csv")
+train <- read.csv("titanic/train.csv")
+
+dim(train)
+dim(test)
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Estructura de los archivos train.csv y test.csv
+str(train)
+str(test)
+```
+
+
+Visualizamos las primeras líneas del conjunto de entrenamiento y de test.  
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Primeras líneas del conjunto de entrenamiento y de test.
+head(train)
+head(test)
+```
+
+
+
+******
+# **Integración y selección de los datos**
+******
+
+
+## **Integración de los Datos**
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Creación archivo train_sin_etiqueta.csv
+
+train_sin_etiqueta <- subset(train, select = -Survived)
+
+# Integración archivos train.csv y test.csv
+df_total_sin_etiqueta = rbind(train_sin_etiqueta, test)
+dim(df_total_sin_etiqueta)
+
+# Guardamos el archivo con el nombre Titanic_global_sin_etiqueta.csv
+write.csv(df_total_sin_etiqueta, "Titanic_global_sin_etiqueta.csv", row.names = FALSE)
+```
+
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Chequeo de líneas duplicadas
+df_total_sin_etiqueta[duplicated(df_total_sin_etiqueta),]
+
+df_total_sin_etiqueta[duplicated(df_total_sin_etiqueta[c("Name","Sex")]),]
+df_total_sin_etiqueta[df_total_sin_etiqueta$Name=="Kelly, Mr. James" | df_total_sin_etiqueta$Name == "Connolly, Miss. Kate",]
+
+```
+
+
+## **Selección de los Datos**
+
+
+Selección de datos inicial
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Eliminamos variables Name
+keep.cols <- c("Pclass", "Sex", "Age", "SibSp", "Parch", "Ticket", "Fare", "Cabin", "Embarked")
+df_total_sin_etiqueta <- df_total_sin_etiqueta[keep.cols]
+
+```
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Creación variable con el contaje de los tickets con mismo nombre
+df_total_sin_etiqueta$Count.ticket <- (df_total_sin_etiqueta%>%group_by(Ticket)%>%mutate(count=n()))$count
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Creación variable con el precio unitariocontaje de los tickets con mismo nombre
+df_total_sin_etiqueta$Unit.price <- df_total_sin_etiqueta$Fare / df_total_sin_etiqueta$Count.ticket
+```
+
+
+
+
+Selección de datos inicial a posteriori
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Eliminamos variable Name
+keep.cols <- c("Pclass", "Sex", "Age", "SibSp", "Parch", "Cabin", "Embarked", "Count.ticket", "Unit.price")
+df_total_sin_etiqueta <- df_total_sin_etiqueta[keep.cols]
+
+```
+
+
+
+
+
+
+******
+# **Limpieza de datos**
+******
+
+## **Datos con ceros o vacíos**
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Overview of the data - Type = 1
+ExpData(data=df_total_sin_etiqueta,type=1)
+
+# Structure of the data - Type = 2
+ExpData(data=df_total_sin_etiqueta,type=2)
+
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Eliminamos variable Cabin
+keep.cols <- c("Pclass", "Sex", "Age", "SibSp", "Parch", "Embarked", "Count.ticket", "Unit.price")
+df_total_sin_etiqueta <- df_total_sin_etiqueta[keep.cols]
+
+```
+
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+
+# Imputación de valores a los valores nulos de la variable age
+df_total_sin_etiqueta <- kNN(df_total_sin_etiqueta, k=3)[1:10]
+head(df_total_sin_etiqueta[is.na(df_total_sin_etiqueta$Age),])
+df_total_sin_etiqueta <- df_total_sin_etiqueta[keep.cols]
+
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Comprobacion de la no existencia de registros nulos para la variable age después de la imputación.
+sum(is.na(df_total_sin_etiqueta$Age))
+```
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Guardamos el archivo con el nombre Titanic_processed.csv
+write.csv(df_total_sin_etiqueta, "aaa.csv", row.names = FALSE)
+```
+
+## **Datos con valores extremos**
+
+
+
+
+
+
+
+
+
+
+
+
+******
+# **Análisis de datos**
+******
+
+
+
+******
+# **Representación de resultados**
+******
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE, include=TRUE}
+# Creación tabla con describe()
+#col_var_cuantitativa_ID <- c("Age", "SibSp", "Parch", "Fare")
+
+#df_var_cuantitativa <- df_total_sin_etiqueta[, col_var_cuantitativa_ID]
+
+#df_var_cuantitativa_tabla <- describe(df_var_cuantitativa, quant = TRUE, IQR = TRUE)
+
+# Eliminación campos no usables
+#df_var_cuantitativa_tabla <- df_var_cuantitativa_tabla[, -c(1, 2, 6, 7, 8, 9, 10, 11, 12, 13, 15)]
+
+# Cambio de nombres de los campos
+#colnames(df_var_cuantitativa_tabla) <- c("Mean", "St_Dev", "Median","IQR")
+
+# Transpuesta de la matriz
+#df_var_cuantitativa_tabla <- data.frame(t(df_var_cuantitativa_tabla))
+
+```
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Selección/Filtrado de las instancias que solamente pertenecen a US
+# Creación de la tabla mediante kable()
+
+# Formato numérico no científico
+#options(scipen = 999)
+
+# Variables auxiliares para la creación de la tabla kable() de forma más automática.
+# Dimensiones de cada grupo de la tabla
+#dim_grupo1 = 4
+
+
+# Límites de las posiciones de los grupos (automatico)
+#dim1_i <- 1
+#dim1_f <- dim_grupo1
+
+
+# Formato de la tabla mediante función kable()
+# Formato de los dígitos de los campos
+# Creación del título de la tabla y anotación
+#kable(df_var_cuantitativa_tabla, digits = c(2, 2, 2, 2, 2, 2, 2), caption = "TABLA RESUMEN DE LAS VARIABLES CUANTITATIVAS (Total observaciones: 400)
+#            __________________________________________________________________________________
+#      <p>   Sales:         Ventas unitarias, en miles, en cada ubicación
+#      <p>   CompPrice:     Precio que cobra el competidor en cada ubicación
+#      <p>   Income:        Nivel de ingresos comunitarios, en miles de dólares
+#      <p>   Advertising:   Presupuesto de publicidad local de la empresa en cada ubicación, en miles de dólares
+#      <p>   Population:    Tamaño de la población en la región, en miles
+#      <p>   Price:         Precio del producto en cada ubicación
+#      <p>   Age:           Edad media de la población local") %>%
+#  
+#  kable_styling("striped",  full_width = T) %>%
+#  pack_rows("Datos Cuantitativos",
+#            dim1_i,
+#            dim1_f,
+#            label_row_css = "background-color: #666; color: #fff;")
+```
+
+******
+# **Resolución del problema**
+******
+
+
+******
+# **Creación del archivo preprocesado**
+******
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Guardamos el archivo con el nombre Titanic_processed.csv
+#write.csv(df, "Titanic_processed.csv", row.names = FALSE)
+```
+
+
+<br>
+
+

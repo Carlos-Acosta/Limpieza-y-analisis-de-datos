@@ -72,7 +72,14 @@ El dataset Titanic reune los datos sobre los pasajeros que viajaban a bordo del 
 
 Este dataset es importante porque nos permite estudiar cuales son los factores que pueden aumentar la posibilidad de supervivencia de personas que se encuentren en situaciones similares. Estos factores intuimos que peuden ser el estatus social, el sexo, la edad y también tener familiares cerca. Asimismo podemos ver si las pautas marcadas por la sociedad de "mujeres y niños primero" se cumplen cuando las personas se encuentran en situaciones de estres extremo.  
 
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Carga de los archivos que contienen los datos del train y test
+test <- read.csv("titanic/test.csv")
+train <- read.csv("titanic/train.csv")
 
+dim(train)
+dim(test)
+```
 
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
@@ -109,11 +116,13 @@ Las variables de las que se compone el dataset son:
 
 
 
+
+
+
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-# Estructura del archivo que contiene el dataframe
+# Estructura de los archivos train.csv y test.csv
 str(train)
 str(test)
-str(outcome)
 ```
 
 Aplicamos la función `str` para visualizar las características de los datos de los conjuntos de entrenamiento y test. 
@@ -130,7 +139,7 @@ sort(colnames(test))
 
 Visualizamos las primeras líneas del conjunto de entrenamiento y de test.  
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-# Primeras líneas de los datos
+# Primeras líneas del conjunto de entrenamiento y de test.
 head(train)
 head(test)
 ```
@@ -397,7 +406,13 @@ head(df[is.na(df$Age),])
 
 ```
 
-Una vez ejecutado el algoritmo para imputar los valores, volvemos a comprobar si existen valores NA y podemos confirmar que todos los NA para la variable edad han sido imputados.  
+Una vez ejecutado el algoritmo para imputar los valores, volvemos a comprobar si existen valores NA y podemos confirmar que todos los NA para la variable edad han sido imputados. 
+
+
+
+
+
+
 
 Ahora comprobamos las variables que toman valores igual a cero sin que tenga sentido que tomen este tipo de valor.   
 
