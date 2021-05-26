@@ -332,13 +332,14 @@ df_total_sin_etiqueta <- df_total_sin_etiqueta[keep.cols]
 ```
 
 
-<br>
 
-<p align="center">
-  <img src="./images/tabla_seleccion.png">
-</p>
-
-
+Variable Modificada | Tipo de selección | Apartado realizado | Motivo
+------------------- | ----------------- | ------------------ | ------
+Name|Eliminación|2.2|Variable no útil al ser independiente al estudio
+PassengerId|Eliminación|2.2|Variable no útil al ser un simple identificador
+Ticket|Eliminación|2.3|Usada para crear nueva variable y ya no es útil
+Fase|Eliminación|2.3|Usada para crear nueva variable y ya no es útil
+Cabin|Eliminación|3.1|Existencia masiva de valores nulos	
 
 
 ## **Creación de nuevas variables**
@@ -597,6 +598,13 @@ Una vez limpiado el archivo que contenía las líneas de los conjuntos train y t
 
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Guardamos en disco el archivo global
+write.csv(df_total_sin_etiqueta, "Titanic_global_sin_etiqueta.csv", row.names = FALSE)
+
+```
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 # Creación del conjunto de train y test después de la limpieza del dataset
 train <- df_total_sin_etiqueta[1:train_rows, ]
 test <- df_total_sin_etiqueta[(train_rows + 1):(train_rows+test_rows), ]
@@ -623,7 +631,7 @@ write.csv(test, "test_processed.csv", row.names = FALSE)
 **Screening**  
 
 Antes de crear las visualizaciones determinamos que las variables numéricas son:  Age y Unit.price que corresponden a la edad de los pasajeros y el precio unitario del billete.  
-Survived, Sex, Cabin, Embarked son variables categóricas y Pclass, SibSp, Parch son variables categóricas ordinales (existen rangos en los valores de las variables).  
+Survived, Sex, Embarked son variables categóricas y Pclass, SibSp, Parch son variables categóricas ordinales (existen rangos en los valores de las variables).  
 
 Realizamos las transformaciones oportunas para guardar las variables con sus tipos correspondientes.  
 
@@ -643,7 +651,7 @@ train$Parch <- factor(train$Parch, levels = c(0, 1, 2, 3, 4, 5, 6, 9))
 Creamos una función que nos facilite visualizar las distribuciones de las variables, así como detectar posibles valores extremos.  
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-#library(fitdistrplus)
+
 visualiz <- function(data, colm, facet.colm, title, facetPlot=FALSE){
 oldpar = par(mfrow = c(2,2), mar=c(2,2,2,2))
 truehist(data[[colm]], main = title)
@@ -767,6 +775,26 @@ La pregunta que planteamos inicialmente es si entre las variables que tenemos en
 Vamos a usar estos datos para analizar el dataset en mayor profundidad. Para ello necesitamos datasets especializados.  
 
 
+
+
+
+
+
+
+
+
+
+**CARLOS: NO VEO PQ NO HACEMOS UN GRUPO CON LA PCLASS 3**
+
+
+
+
+
+
+
+
+
+
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 # Dataframes por clase de pasajero
 train.first <- train[train$Pclass==1,]
@@ -801,22 +829,25 @@ train.not.survived <- train[train$Survived==0,]
 ```
 
 
+
+
+
 ### Comprobación de la normalidad y homogeneidad de la varianza.  
 
 **Normalidad** 
-```{r}
-# visualiz1 <- function(D1, D2, name1, name2, title){
-#   oldpar = par(mfrow = c(2,2), mar=c(2,2,2,2))
-#   truehist(D1, main = paste(name1," ", title))
-#   abline(v = mean(D1), col="red", lwd=3, lty=2);
-#   abline(v = median(D1), lwd=3, lty=2, col="blue");
-#   qqnorm(D1, main = paste(name1, " ", title));qqline(D1, col = 2 )
-#   truehist(D2, main = paste(name2," ", title))
-#   abline(v = mean(D2), col="red", lwd=3, lty=2);
-#   abline(v = median(D2), lwd=3, lty=2, col="blue");
-#   qqnorm(D2, main = paste(name2," ", title)); qqline(D2, col = 2 )
-#   
-# }
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+ visualiz1 <- function(D1, D2, name1, name2, title){
+   oldpar = par(mfrow = c(2,2), mar=c(2,2,2,2))
+  truehist(D1, main = paste(name1," ", title))
+  abline(v = mean(D1), col="red", lwd=3, lty=2);
+  abline(v = median(D1), lwd=3, lty=2, col="blue");
+  qqnorm(D1, main = paste(name1, " ", title));qqline(D1, col = 2 )
+  truehist(D2, main = paste(name2," ", title))
+  abline(v = mean(D2), col="red", lwd=3, lty=2);
+  abline(v = median(D2), lwd=3, lty=2, col="blue");
+  qqnorm(D2, main = paste(name2," ", title)); qqline(D2, col = 2 )
+
+}
 ```
 
 
@@ -826,8 +857,8 @@ Visualizamos los datos de la edad para personas que sobrevivieron en el hundimie
 La media y la mediana de los pasajeros que sobrevivieron están muy cerca. Las personas que no sobrevivieron tienen una edad mediana más baja que la edad media. Los valores de estos dos indicadores de tendencia central son más altos para personas que no sobrevivieron: las personas que muerieron tenían una media de edad algo más alta que los que sobrevivieron.  
 
 Según el qqplot las dos distribuciones son cercanas a la normal. Según el teorema del límite central podemos asumir la distribución normal de la media de estas dos muestras ya que sus tamaños son mayores que 30 observaciones.
-```{r}
-#visualiz1(df.survived$Age, df.not.survived$Age, "Survived", "Not Survived", "")
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+visualiz1(train.survived$Age, train.not.survived$Age, "Survived", "Not Survived", "")
 ```
 
 
@@ -835,18 +866,29 @@ Comprobaremos de la igualdad de las varianzas entre los conjuntos de datos de pa
 
 El contraste de varianzas se realiza mediante un contraste de hipótesis, donde aceptar H0 significaría que las varianzas son iguales. 
 
-El valor p-value que obtenemos es de 0.02. Este valor es menor que alfa y indica que con un nivel de confianza del 95% podemos rechazar la hipótesis nula de que las varianzas son iguales. Las varianzas en la edad de los pasajeros que sobrevivieron y los que no sobrevivieron son diferentes.  
 
-```{r}
-#var.test(df.survived$Age, df.not.survived$Age)
+**CARLOS: HAY QUE ACTUALIZAR LAS CONCLUSIONES (VARIANZAS IGUALES O NO) UNA VEZ CONFIRMADO EL JUEGO DE DATOS**
+
+*El valor p-value que obtenemos es de 0.02. Este valor es menor que alfa e indica que con un nivel de confianza del 95% podemos rechazar la hipótesis nula de que las varianzas son iguales. Las varianzas en la edad de los pasajeros que sobrevivieron y los que no sobrevivieron son diferentes.*
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+var.test(train.survived$Age, train.not.survived$Age)
+```
+
+**CARLOS: CREO QUE DEBERIAMOS HACER LO DE LA VARIANZA PARA SIBSP, PARCH, COUNT.TICKET Y PRICE.UNIT PQ SON REALMENTE NUMERICAS**
+
+**CARLOS:NO SE PQ NO PUEDO HACERLO CON PRICE.UNIT**
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#var.test(train.survived$Price.unit, train.not.survived$Price.unit)
 ```
 
 
 **OLGA**: pues ni idea como hacer los test con variables categóricas.  
 La mayoría de las variables que consideramos importantes para este estudio contienen datos categóricos. Así es el caso de la clase se los pasajeros, el número de personas con las que viaja y el sexo.  
-```{r}
-#plot(df.young$Survived)
-#plot(df.older$Survived)
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+plot(train.young$Survived)
+plot(train.older$Survived)
 ```
 
 
@@ -863,7 +905,7 @@ La mayoría de las variables que consideramos importantes para este estudio cont
 
 ### Aplicación de pruebas estadísticas para comparar los grupos de datos. En función de los datos y el objetivo del estudio, aplicar pruebas de contraste de hipótesis, correlaciones, regresiones, etc. Aplicar al menos tres métodos de análisis diferentes.   
 
-** Contraste de hiótesis**  
+** Contraste de hipótesis**  
 
 En las visualizaciones que hemos realizado a lo largo de la actividad hemos visto que las personas que viajaban en primera clase sobrevivieron mucho más que las personas de segunda y tercera clase.  
 
@@ -874,29 +916,304 @@ H1: Existe dependencia entre viajar en primera clase y sobrevivir.
 
 
 En primer lugar creamos una tabla de contingencia para ver cuantas personas sobrevivieron según la clase en la que viajaban. Para esto no necesitaremos usar los datos que hemos particionado.    
-```{r}
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 
-#tc<-table( df.first.second$Pclass, df.first.second$Survived )
-#tc
+tc<-table( train.first.second$Pclass, train.first.second$Survived )
+tc
 
 
 ```
+
+
+
+
+
+**Contraste de hipótesis sobre el sexo y nivel de supervivencia**
+
+
+¿La proporción de supervivencia en hombres es inferior a la de las mujeres?  
+
+
+Acorde con la pregunta planteada, realizaremos un contraste de hipótesis con las siguientes hipótesis de partida:  
+
+Hipótesis nula - H0: La proporción de hombres que sobreviven es igual o mayor a 50% -> H0: p >= p0, siendo po = 0.5  
+Hipótesis alternativa - H1: La proporción de hombres es menor a 50% -> H1: p < p0, siendo po = 0.5  
+
+
+Este contraste de hipótesis representa un test de la proporción de la población por la cola izquierda, por tanto, el valor p0 representará, bajo la hipótesis nula, el límite inferior de la supuesta verdadera proporción de la población.  
+Este contraste rechazará la HO si el estadístico calculado es menor o igual al valor crítico (con signo negativo) al nivel de significación estimado.  
+
+El hecho que la proporción de hombres que sobreviven sea menor que 0.5, implicaría que la proporción de hombres que sobreviven es inferior a la de las mujeres.  
+
+
+Debido a que es un contraste de hipótesis sobre proporción de una muestra, y esta muestra es considerada grande (n > 30), podremos definir un estadístico de contraste como una observación de una variable aleatoria que se distribuye aproximadamente como una N(0,1).  
+
+Debido al planteamiento de la hipótesis nula y su alternativa y por cómo se han descrito las hipótesis H0 y H1, se observa que la hipótesis alternativa es unilateral, puesto que se plantea como un límite a un solo valor dado.  
+
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Fijamos un nivel de significación
+
+alfa <- 0.05
+```
+
+
+Determinamos el estadístico de contraste, en este caso, la muestra es grande y proviene de una distribución de Bernoulli de parámetro p, con lo cual, según el Teorema del Límite Central podremos utilizar el estadístico de contraste mostrado anteriormente.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Determinación del estadístico de contraste
+
+train.survived_M <- train.survived[train.survived$Sex=="male",]
+train.survived_F <- train.survived[train.survived$Sex=="female",]
+
+
+
+n_Sex <- length(train.survived$Sex)
+n_Sex
+n_Sex_M <- length(train.survived_M$Sex)
+n_Sex_M
+n_Sex_F <- length(train.survived_F$Sex)
+n_Sex_F
+
+
+# Proporción muestral de hombres
+p_hat <- n_Sex_M/n_Sex
+p_hat
+
+# Proporción hipotesis nula
+p_0 <- 0.5
+p_0
+
+# Estadístico empleado z_p
+z_p = (p_hat - p_0)/sqrt(p_0 * (1 - p_0)/n_Sex) 
+z_p
+
+# Cálculo de valores críticos para el valor de significación asignado
+
+z_p.alfa = qnorm(1-alfa) 
+-z_p.alfa
+
+# Cálculo del valor P en nuestro contraste de hipótesis
+
+valor_p_Sex = pnorm(z_p) 
+valor_p_Sex   
+```
+
+
+Tal y como se ha planteado H0 y H1, siendo H1 p < 0.5, rechazaremos H0 si el valor del estadístico z_p es menor que el valor crítico (en signo negativo), siendo este el caso -6.70 < -1.64.  
+
+
+Según el estadístico de contraste utilizado y el valor crítico calculado, al ser el primero (-6.70) menor que el segundo (-1.64), al 0.05 de nivel de significancia, podemos rechazar la hipótesis nula de que la proporción de supervivencia en hombres es mayor o igual a 50% respecto al de las mujeres.
+De igual forma, al ser valor p casi nulo y por tanto menor que nuestro nivel de significación (0.05), el valor p es significativo y podemos rechazar, confirmando el contraste anterior, la hipótesis nula.  
+
+
+
+
+Siguiendo la misma metodología, responderemos a las siguientes preguntas:
+
+
+**¿La proporción de supervivencia en menores es inferior a la de los mayores?** 
+
+Hipótesis nula - H0: La proporción de menores que sobreviven es igual o mayor a 50% -> H0: p >= p0, siendo po = 0.5  
+Hipótesis alternativa - H1: La proporción de menores es menor a 50% -> H1: p < p0, siendo po = 0.5  
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Determinación del estadístico de contraste
+
+train.survived_Y <- train.survived[train.survived$Age<18,]
+train.survived_O <- train.survived[train.survived$Age>=18,]
+
+
+n_Age <- length(train.survived$Age)
+n_Age
+n_Age_Y <- length(train.survived_Y$Age)
+n_Age_Y
+n_Age_O <- length(train.survived_O$Age)
+n_Age_O
+
+
+# Proporción muestral de menores
+p_hat <- n_Age_Y/n_Age
+p_hat
+
+# Proporción hipotesis nula
+p_0 <- 0.5
+p_0
+
+# Estadístico empleado z_p
+z_p = (p_hat - p_0)/sqrt(p_0 * (1 - p_0)/n_Age) 
+z_p
+
+# Cálculo de valores críticos para el valor de significación asignado
+
+z_p.alfa = qnorm(1-alfa) 
+-z_p.alfa
+
+# Cálculo del valor P en nuestro contraste de hipótesis
+
+valor_p_Age = pnorm(z_p) 
+valor_p_Age   
+```
+
+
+Según el estadístico de contraste utilizado y el valor crítico calculado, al ser el primero (-4.43) menor que el segundo (-1.64), al 0.05 de nivel de significancia, podemos rechazar la hipótesis nula de que la proporción de supervivencia en hombres es mayor o igual a 50% respecto al de las mujeres.
+De igual forma, al ser valor p casi nulo y por tanto menor que nuestro nivel de significación (0.05), el valor p es significativo y podemos rechazar, confirmando el contraste anterior, la hipótesis nula.  
+
+
+
+**¿La proporción de supervivencia en viajeros con billete único es inferior a la de los viajeros con billete en conjunto?**
+
+Hipótesis nula - H0: La proporción de viajeros con billete único que sobreviven es igual o mayor a 50% -> H0: p >= p0, siendo po = 0.5  
+Hipótesis alternativa - H1: La proporción de viajeros con billete único es menor a 50% -> H1: p < p0, siendo po = 0.5  
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Determinación del estadístico de contraste
+
+train.survived_S <- train.survived[train.survived$Count.ticket==1,]
+train.survived_My <- train.survived[train.survived$Count.ticket>1,]
+
+n_Count.ticket <- length(train.survived$Count.ticket)
+n_Count.ticket
+n_Count.ticket_S <- length(train.survived_S$Count.ticket)
+n_Count.ticket_S
+n_Count.ticket_My <- length(train.survived_My$Count.ticket)
+n_Count.ticket_My
+
+
+# Proporción muestral de menores
+p_hat <- n_Count.ticket_S/n_Count.ticket
+p_hat
+
+# Proporción hipotesis nula
+p_0 <- 0.5
+p_0
+
+# Estadístico empleado z_p
+z_p = (p_hat - p_0)/sqrt(p_0 * (1 - p_0)/n_Count.ticket) 
+z_p
+
+# Cálculo de valores críticos para el valor de significación asignado
+
+z_p.alfa = qnorm(1-alfa) 
+-z_p.alfa
+
+# Cálculo del valor P en nuestro contraste de hipótesis
+
+valor_p_Count.ticket = pnorm(z_p) 
+valor_p_Count.ticket   
+```
+
+
+Según el estadístico de contraste utilizado y el valor crítico calculado, al ser el primero (-10.92) menor que el segundo (-1.64), al 0.05 de nivel de significancia, podemos rechazar la hipótesis nula de que la proporción de supervivencia en hombres es mayor o igual a 50% respecto al de las mujeres.
+De igual forma, al ser valor p casi nulo y por tanto menor que nuestro nivel de significación (0.05), el valor p es significativo y podemos rechazar, confirmando el contraste anterior, la hipótesis nula.  
+
+
+
+**CARLOS: CHI CUADRADO ES PARA VER SI SON INDEPENDIENTES O NO, VERDAD? COMO LO RELACIONAMOS PARA COMPROBAR "EN MAYOR MEDIDA"?**
 
 Utilizamos el test Chi cuadrado para comprobar si los pasajeros de primera clase sobrevivieron en mayor medida que los pasajeros de segunda clase.  
 
 El test se aplica en R con un nivel de confianza por defecto del 95%.  
 El valor p-value es menor que 0.05, por lo tanto, al rechazar la hipótesis nula no estaríamos cometiendo un error muy grave. Podemos aceptar la hipótesis alternativa H1 y afirmar que sí que existe relación entre la clase en la que viaja el pasajero y su posibilidad de supervivencia, con un nivel de confianza del 95%.  
 
-```{r}
-#chisq.test(tc, correct=FALSE)
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+chisq.test(tc, correct=FALSE)
 ```
+
+
+
+
+
+**Relación entre supervivencia y billete único o grupal**
+
+
+Crearemos dos tablas de contingencia entre las variables que indican supervencia y la que indica el tipo de billete. Una primera en valores absolutos, y una segunda mostrando las proporciones.
+
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+
+# Tabla de contingencia Survived - Tipo Billete
+
+train$ticket_tipo[train$Count.ticket==1] = "Único"
+train$ticket_tipo[train$Count.ticket!=1] = "Grupal"
+
+train$ticket_tipo <- as.factor(train$ticket_tipo)
+table(train$Survived, train$ticket_tipo, dnn = c("Supervivencia", "Tipo Billete"))
+
+# Tabla de contingencia en proporciones Survived - Tipo Billete
+prop.table(table(train$Survived, train$ticket_tipo, dnn = c("Supervivencia (%)", "Tipo Billete (%)")))
+
+length(train$ticket_tipo)
+length(train$Survived)
+
+```
+
+
+Dos variables categóricas que forman parte de una tabla de contingencia pueden ser sujetas a un test de independencia. Este test puede ser representado for el ChiSquare Test mediante un contraste de hipótesis.  
+
+El contraste se realizará para observar si las dos variables son independientes o no, por tanto, podemos plantear las hipótesis como se indica a continuación:  
+
+Hipótesis nula - H0: Las variables Survived y Tipo Billete son independientes.  
+Hipótesis alternativa - H1: Las variables Survived y Tipo Billete están relacionadas.  
+
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+
+# Tabla de contingencia Survived y Tipo Billete
+tabla_cont <- table(train$Survived, train$ticket_tipo, dnn = c("Supervivencia", "Tipo Billete"))
+tabla_cont
+
+
+# Comprobación con la función chisq.test()
+chisq.test(tabla_cont)
+
+
+```
+
+
+El cálculo de los grados de libertad para una distribución Chi Square se calcula como df = (c - 1)(r - 1) donde c es el número´de columnas y r el número de filas. En nuestro caso c = r = 2, por lo tanto df = (2 - 1)(2 - 1) = 1.
+
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+
+# Grados de libertad
+
+gdl <- 1
+
+# Nivel de confianza
+
+ndc <- 0.95
+
+
+# Valor Crítico
+val_cri <- qchisq(ndc, gdl)
+val_cri
+
+```
+
+
+
+Debido a que el estadístico Chi Square es mayor al valor crítico calculado de la distribución Chi Square (con un grado de libertad y con un nivel de significación de 0.05), podemos rechazar la hipótesis nula de que no hay relación entre Survived y Tipo de Billete, es decir, rechazamos la hipótesis al 95 % de nivel de confianza de que tales variables sean independientes.  
+
+Como el valor de p es menor que el nivel de significancia, podemos rechazar la hipótesis nula de que las variables Survived y Tipo de Billete son independientes, cuadrando este resultado con los cálculos anteriores.
+
+Por tanto, se puede afirmar al 95% de nivel de confianza que las variables Survived y Tipo de Billete **están relacionadas**.
+
+
+
 
 
 **Contraste de hipótesis sobre la edad de supervivencia**
 
-Planteamos la pregunta de investigación: Queremos saber si las personas que sobrevivieron eran más jóvenes que las personas que muerieron en el accidente o, por el contrario, la edad para las personas que muerieron y sobrevivieron es similar.   
+Planteamos la pregunta de investigación: Queremos saber si las personas que sobrevivieron eran más jóvenes que las personas que murieron en el accidente o, por el contrario, la edad para las personas que muerieron y sobrevivieron es similar.   
 
-Nos encontramos ante el caso en el que podemos asumir la normalidad de las distribuciones de la media de las dos muestras pero sabemos que las varianzas de las muestras son diferentes. Se trata de un test paramétrico de dos muestras.    
+Nos encontramos ante el caso en el que podemos asumir la normalidad de las distribuciones de la media de las dos muestras pero sabemos que las varianzas de las muestras **(EL RESULTADO HA CAMBIADO)** son diferentes. Se trata de un test paramétrico de dos muestras.    
 
 H0: La media de edad de las personas supervivientes es la misma que de las personas que muerieron  
 H1: La media de edad de las personas que murieron es mayor que la de las personas supervivientes.    
@@ -905,9 +1222,40 @@ Usamos un test paramétrico definido por `t.test`
 
 
 Con un valor p-value igual por debajo de 0.05 podemos aceptar la hipótesis H1. Con un nivel de confianza del 95% afirmamos que las personas que murieron en el Titanic tienen una media de edad más alta que las personas que sobrevivieron.  
-```{r}
-#t.test(df.not.survived$Age, df.survived$Age, alternative="greater", var.equal=FALSE)
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+t.test(train.not.survived$Age, train.survived$Age, alternative="greater", var.equal=FALSE)
 ```
+
+
+
+**Correlaciones**
+
+
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+
+# Relaciones cruzadas de las variables cuantitativas (correlaciones) para todos los datos.
+
+col_var_cuantitativa_sin_ID <- c("Age", "SibSp", "Parch", "Count.ticket", "Unit.price")
+
+df_var_cuantitativa <- df_total_sin_etiqueta[, col_var_cuantitativa_sin_ID]
+
+
+pairs.panels(df_var_cuantitativa[,col_var_cuantitativa_sin_ID], 
+             method = "pearson", 
+             hist.col = "grey",
+             density = TRUE,  
+             ellipses = TRUE 
+             )
+
+
+
+
+
+```
+
+
 
 **Regresión**   
 
@@ -915,16 +1263,16 @@ Con un valor p-value igual por debajo de 0.05 podemos aceptar la hipótesis H1. 
 Aplicamos una regresión logística para predecir la probabilidad de supervivencia usando como variable predictora la variable sexo.  
 
 
-```{r}
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 
-#model0=glm(formula=Survived~Sex, data=df, family=binomial(link=logit))
-#summary(model0)
+model0=glm(formula=Survived~Sex, data=train, family=binomial(link=logit))
+summary(model0)
 ```
 Calculamos los Odds Ratio que resultan ser todos menores que 1. Esto significa un factor de protección y se interpreta: La probabilidad de ser hombre y sobrevivir (1) es de 3% de la probabilidad de ser mujer y sobrevivir.  
 
 
-```{r}
-#exp(coefficients(model0))
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+exp(coefficients(model0))
 ```
 
 
@@ -934,26 +1282,26 @@ Ambas variables son significativas y así lo indican los asteriscos junto a los 
 
 Ser hombre, viajar en clase 2 o clase 3 reduce la posibilidad de supervivencia con respecto a ser mujer y viajar en primera clase. Esto viene indicado por el signo negativo que acompaña el valor del coeficiente para Sexmale, Pclass2 y Pclass3.   
 
-```{r}
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 
-#model1=glm(formula=Survived~Sex+Pclass, data=df, family=binomial(link=logit))
-#summary(model1)
+model1=glm(formula=Survived~Sex+Pclass, data=train, family=binomial(link=logit))
+summary(model1)
 ```
 
-Calculamos los odds ratio. Igual que en el caso anterior vemos que la probabilidad ser hombre y sobrevivir es mucho menor que la de ser mujer y sobrevivir. La probabilidad de sobrevivir en segunda clase es 0.43 de la probabilidad de sobrevivir en primera clase. Para la tercera clase la probabilidad de sobrevivir es incluso menor.  
-```{r}
-#exp(coefficients(model1))
+Calculamos los odds ratio. Igual que en el caso anterior vemos que la probabilidad ser hombre y sobrevivir es mucho menor que la de ser mujer y sobrevivir. La probabilidad de sobrevivir en segunda clase es **(VARIA RESULTADO)** 0.43 de la probabilidad de sobrevivir en primera clase. Para la tercera clase la probabilidad de sobrevivir es incluso menor.  
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+exp(coefficients(model1))
 ```
 
 
 Por último queremos ver si la probabilidad de sobrevivir es mayor para pasajeros que viajaban acompañados.
 
 En los datos hemos detectado que había hasta 8 pasajeros con el mismo billete. Posiblemente se tratara de familia o amigos. Usaremos esta variable para crear un modelo.  
-```{r}
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 
 
-#model2=glm(formula=Survived~factor(Count.ticket)+Embarked, data=df, family=binomial(link=logit))
-#summary(model2)
+model2=glm(formula=Survived~factor(Count.ticket)+Embarked, data=train, family=binomial(link=logit))
+summary(model2)
 
 ```
 
@@ -961,18 +1309,27 @@ El resultado del modelo indica que cuando dos, tres o cuatro personas viajaban j
 
 Calculamos los ORS. Para las personas que viajaban con otra persona, otras dos o tres personas el "riesgo" de sobrevivir es mucho mayor.   
 
-```{r}
-#exp(coefficients(model2))
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+exp(coefficients(model2))
 ```
 
-```{r}
+
+**CARLOS: CREO QUE ESTO LO PODEMOS BORRAR PQ YA TENEMOS EL ARCHIVO TEST PREPARADO Y LIMPIO)**
+
+**HAY QUE MIRAR QUE MÉTODOS, SUPERVISADOS O NO SUPERVISADOS QUEREMOS HACER**
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 #set.seed(1)
-#df.random <- df[sample(nrow(df)),]
+#train.random <- train[sample(nrow(train)),]
 ```
-```{r}
+
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 #set.seed(666)
-#y <- df.random[,1] 
-#X <- df.random[,-1] 
+#y <- train.random[,1] 
+#X <- train.random[,-1] 
 ```
 
 
@@ -1023,6 +1380,241 @@ Calculamos los ORS. Para las personas que viajaban con otra persona, otras dos o
 ******
 
 
+## Tabla resumen de las variables cualitativas (datos completos)
+
+
+Realizaremos una tabla resumen con las frecuencias relativas y las frecuencias absolutas de las variables cualitativas.
+Creamos un dataframe auxiliar para generar nuestra tabla.
+
+Calculamos, para todos los campos, la frecuencia relativa y absoluta a través del contaje dividido por el número total de filas del dataframe.
+
+Creamos una tabla mediante la función kable().
+
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE, include=TRUE}
+
+col_var_cualitativa_sin_ID <- c("Pclass", "Sex", "Embarked")
+
+df_var_cualitativa <- df_total_sin_etiqueta[, col_var_cualitativa_sin_ID]
+
+df_var_cualitativa$Sex <- as.factor(df_var_cualitativa$Sex)
+df_var_cualitativa$Embarked <- as.factor(df_var_cualitativa$Embarked)
+
+
+# Frecuencias relativas y absolutas de campo PClass
+Pclass_table_frec <- (count(df_var_cualitativa$Pclass))
+Pclass_table_cum <- (count(df_var_cualitativa$Pclass)/dim(df_var_cualitativa)[1])[2]
+
+Pclass_table <- cbind (Pclass_table_frec, Pclass_table_cum)
+
+# Frecuencias relativas y absolutas de campo Sex
+Sex_table_frec <- (count(df_var_cualitativa$Sex))
+Sex_table_cum <- (count(df_var_cualitativa$Sex)/dim(df_var_cualitativa)[1])[2]
+
+Sex_table <- cbind (Sex_table_frec, Sex_table_cum)
+
+# Frecuencias relativas y absolutas de campo Embarked
+Embarked_table_frec <- (count(df_var_cualitativa$Embarked))
+Embarked_table_cum <- (count(df_var_cualitativa$Embarked)/dim(df_var_cualitativa)[1])[2]
+
+Embarked_table <- cbind (Embarked_table_frec, Embarked_table_cum)
+
+
+
+# Unión de toda la tabla asignando el nombre de las columnas
+df_var_cualitativa_table <- rbind.data.frame(Pclass_table, Sex_table, Embarked_table)
+colnames(df_var_cualitativa_table) <- c("Variable Cualitativa", "Frecuencia Absoluta", "Frecuencia Relativa")
+
+# Variables auxiliares para la creación de la tabla kable() de forma más automática.
+
+# Dimensiones de cada grupo de la tabla
+dim_grupo1_ = length(unique(df_var_cualitativa$Pclass))
+dim_grupo2_ = length(unique(df_var_cualitativa$Sex))
+dim_grupo3_ = length(unique(df_var_cualitativa$Embarked))
+
+
+
+# Límites de las posiciones de los grupos (automatico)
+dim1_i <- 1
+dim1_f <- dim_grupo1_
+dim2_i <- dim1_f +1
+dim2_f <- dim_grupo1_ + dim_grupo2_
+dim3_i <- dim2_f +1
+dim3_f <- dim_grupo1_ + dim_grupo2_ + dim_grupo3_
+
+
+
+# Formato de la tabla mediante función kable()
+# Formato de los dígitos de los campos
+# Creación del título de la tabla y anotación
+kable(df_var_cualitativa_table, digits = c(0,0,3), caption = "-TABLA RESUMEN DE LAS VARIABLES CUALITATIVAS-
+      <p> (Total observaciones: 1309. Suma de frecuencias relativas sin redondeo = 1.000)") %>%
+  kable_styling("striped",
+                full_width = F) %>%
+  pack_rows("Clases Embarque",
+            dim1_i,
+            dim1_f,
+            label_row_css = "background-color: #666; color: #fff;") %>%
+  pack_rows("Sexo",
+            dim2_i,
+            dim2_f,
+            label_row_css = "background-color: #666; color: #fff;") %>%
+  pack_rows("Embarque",
+            dim3_i,
+            dim3_f,
+            label_row_css = "background-color: #666; color: #fff;")
+
+```
+
+
+
+
+
+## Tabla resumen de las variables cuantitativas (datos completos)
+
+Realizaremos una tabla resumen con los estadísticos principales de tendencia central y dispersión, con medidas robustas y no robustas.
+Para ello, utilizaremos tres funciones que nos aportarán diferentes estadísticos a utilizar:
+
+describe()
+winsor.mean() (aplicaremos unos límites del 5 %).
+stat.desc()
+Estas tres funciones nos darán diversos estadísticos que uniremos y ordenaremos en una única tabla para mostrar un completo resumen estadístico de las variables cuantitativas.
+
+
+Finalmente, creamos una tabla mediante la función kable().
+
+
+
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE, include=TRUE}
+
+# Creación tabla con describe()
+col_var_cuantitativa_sin_ID <- c("Age", "SibSp", "Parch", "Count.ticket", "Unit.price")
+
+df_var_cuantitativa <- df_total_sin_etiqueta[, col_var_cuantitativa_sin_ID]
+
+df_var_cuantitativa_tabla <- describe(df_var_cuantitativa, quant = TRUE, IQR = TRUE)
+
+# Creación tabla con winsor.mean()
+winsor <- data.frame(t(winsor.mean(df_var_cuantitativa, trim= 0.05)))
+winsor_df <- data.frame(t(winsor))
+colnames(winsor_df) <- c("Winsor Mean 5%")
+
+# Unión tablas describe() con winsor.mean()
+df_var_cuantitativa_tabla$Winsor_Mean_.5 <- winsor_df$`Winsor Mean 5%`
+
+# Eliminación campos no usables
+df_var_cuantitativa_tabla <- df_var_cuantitativa_tabla[, -c(1, 11, 12, 15 )]
+
+# Cambio de nombres de los campos
+colnames(df_var_cuantitativa_tabla) <- c("Number", "Mean", "St_Dev", "Median", "Trimmed_Median", "MAD", "Min", "Max", "Range", "SE_Mean", "IQR", "Winsor_Mean_0.5")
+
+df_var_cuantitativa_tabla
+
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE, include=TRUE}
+
+options(digits=2)
+
+# Creación tabla con stat.desc()
+df_var_cuantitativa_tabla2 <- as.data.frame(t(round(stat.desc(df_var_cuantitativa),2)))
+
+# Cambio de nombres de los campos
+colnames(df_var_cuantitativa_tabla2) <- c("tot_num", "NUll", "NA", "Min_", "Max_", "Range_", "sum", "median_", "mean_", "se_mean_", "CI_Mean_0.95", "Var", "stddev_", "Coef_Var")
+
+# Eliminación campos no usables
+df_var_cuantitativa_tabla2 <- df_var_cuantitativa_tabla2[, -c(1, 2, 4, 5, 6 ,7, 8, 9, 10, 13)]
+df_var_cuantitativa_tabla2
+
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE, include=TRUE}
+
+# Unión tablas describe()/winsor.mean() con tabla stat.desc()
+counterdf_cuan <- c(1:dim(df_var_cuantitativa_tabla2)[2])
+df_var_cuantitativa_tabla_dim_ini <- dim(df_var_cuantitativa_tabla)[2]
+
+for (i in counterdf_cuan){
+      df_var_cuantitativa_tabla[i+df_var_cuantitativa_tabla_dim_ini] <- df_var_cuantitativa_tabla2[i]
+     }
+
+# Reordenamiento de las columnas para poder agrupar los campos for temática: tendencia central, dispersión, robusta y no robusta
+df_var_cuantitativa_tabla <- df_var_cuantitativa_tabla[, c(2, 10, 14, 4, 5, 12, 15, 16, 3, 6, 11, 1, 13, 7, 8, 9)]
+
+
+# Creación del dataframe haciendo la transpuesta de la tabla anterior para tener los estadisticos en las fila y las variables en las columnas.
+df_var_cuantitativa_tabla <- data.frame(t(df_var_cuantitativa_tabla))
+df_var_cuantitativa_tabla
+
+```
+
+
+
+
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE, include=TRUE}
+
+# Creación de la tabla mediante kable()
+
+# Formato numérico no científico
+options(scipen = 999)
+
+# Variables auxiliares para la creación de la tabla kable() de forma más automática.
+# Dimensiones de cada grupo de la tabla
+dim_grupo1 = 3
+dim_grupo2 = 3
+dim_grupo3 = 3
+dim_grupo4 = 2
+dim_grupo5 = 5
+
+# Límites de las posiciones de los grupos (automatico)
+dim1_i <- 1
+dim1_f <- dim_grupo1
+dim2_i <- dim1_f +1
+dim2_f <- dim_grupo1 + dim_grupo2
+dim3_i <- dim2_f +1
+dim3_f <- dim_grupo1 + dim_grupo2 + dim_grupo3
+dim4_i <- dim3_f +1
+dim4_f <- dim_grupo1 + dim_grupo2 + dim_grupo3 + dim_grupo4
+dim5_i <- dim4_f +1
+dim5_f <- dim_grupo1 + dim_grupo2 + dim_grupo3 + dim_grupo4 + dim_grupo5
+
+# Formato de la tabla mediante función kable()
+# Formato de los dígitos de los campos
+# Creación del título de la tabla y anotación
+kable(df_var_cuantitativa_tabla, digits = c(2, 2, 2, 3), caption = "-TABLA RESUMEN DE LAS VARIABLES CUANTITATIVAS-
+      <p> (Total observaciones: 1309.)") %>%
+  kable_styling("striped",  full_width = F) %>%
+  pack_rows("Tendencia Central (medidas  NO robustas)",
+            dim1_i,
+            dim1_f,
+            label_row_css = "background-color: #666; color: #fff;") %>%
+  pack_rows("Tendencia Central (medidas robustas)",
+            dim2_i,
+            dim2_f,
+            label_row_css = "background-color: #666; color: #fff;") %>%
+  pack_rows("Dispersion (medidas NO robustas)",
+            dim3_i,
+            dim3_f,
+            label_row_css = "background-color: #666; color: #fff;") %>%
+  pack_rows("Dispersion (medidas robustas)",
+            dim4_i,
+            dim4_f,
+            label_row_css = "background-color: #666; color: #fff;") %>%
+  pack_rows("Información Adicional", dim5_i, dim5_f ,label_row_css = "background-color: #666; color: #fff;")
+
+```
+
+
+
+
+
+
+
 ```{r echo=TRUE, message=FALSE, warning=FALSE, include=TRUE}
 # Creación tabla con describe()
 #col_var_cuantitativa_ID <- c("Age", "SibSp", "Parch", "Fare")
@@ -1041,6 +1633,7 @@ Calculamos los ORS. Para las personas que viajaban con otra persona, otras dos o
 #df_var_cuantitativa_tabla <- data.frame(t(df_var_cuantitativa_tabla))
 
 ```
+
 
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
