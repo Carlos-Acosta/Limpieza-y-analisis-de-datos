@@ -3,12 +3,19 @@ title: "**M2.851 – TIPOLOGÍA Y CICLO DE VIDA DE LOS DATOS: PRA 2**"
 author: "Olga Garcés Ciemerozum / Carlos Acosta Quintas"
 date: 'Junio 2021'
   
-output:
-  pdf_document:
-    highlight: zenburn
-    toc: yes
+#output:
+ # pdf_document:
+    #highlight: zenburn
+    #toc: yes
      
-  word_document: default
+  #word_document: default
+ #html_document:
+    #highlight: default
+    #number_sections: yes
+    #theme: cosmo
+    #toc: yes
+    #toc_depth: 4
+output:
   html_document:
     highlight: default
     number_sections: yes
@@ -1526,16 +1533,18 @@ predictors<-colnames(trainX)
 
 ```{r}
 #Training the random forest model
-model_rf<-train(trainX,y=as.factor(trainy.1),method='rf',trControl=fitControl,tuneLength=9)
+#model_rf<-train(trainX,y=as.factor(trainy.1),method='rf',trControl=fitControl,tuneLength=9)
 
 #Predicting using random forest model
-validX$pred_rf<-predict(object = model_rf,validX)
+#validX$pred_rf<-predict(object = model_rf,validX)
 
 #Checking the accuracy of the random forest model
-confusionMatrix(as.factor(validy.1),validX$pred_rf)
+#confusionMatrix(as.factor(validy.1),validX$pred_rf)
 ```
+
+
 ```{r}
-plot(model_rf)
+#plot(model_rf)
 ```
 
 
