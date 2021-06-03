@@ -13,7 +13,8 @@ A su vez, se entregará, junto con la presente memoria, una serie de archivos co
 ## Miembros del equipo
 
 La actividad ha sido realizada por: **Olga Garcés Ciemerozum** y **Carlos Acosta Quintas**.
-
+ 
+  
 ## Código Fuente (ficheros) 
 
 **GarcesOlga_AcostaCarlos_PRA2.Rmd**: Archivo en lenguaje de programación R:<p>
@@ -25,8 +26,30 @@ Este archivo contiene la totalidad del código utilizado en el presente proyecto
 Este proyecto dispone de una memoria con información exhaustiva y explicaciones en cuanto a la limpieza y análisis del dataset.<p>
 La memoria se dispone en formato pdf y HTML en la carpeta "Informe", y los nombres de los archivos son:
   
-**GarcesOlga_AcostaCarlos_PRA2.pdf**: Archivo en formato PDF.<p>
-**GarcesOlga_AcostaCarlos_PRA2.html**: Archivo en formato HTML.
+• **GarcesOlga_AcostaCarlos_PRA2.pdf**: Archivo en formato PDF.<p>
+• **GarcesOlga_AcostaCarlos_PRA2.html**: Archivo en formato HTML.
+  
+## Juego de datos original
+  
+El dataset Titanic reune los datos sobre los pasajeros que viajaban a bordo del Titanic y registra para cada persona su supervivencia o no en el accidente. El Titanic transportaba a pasajeros con gran diversidad en sus niveles de renta y edad y a bordo se encontraban familias enteras.
+
+El origen de los datos es kaggle, y su ubicación se muestra en el siguiente link:
+
+https://www.kaggle.com/c/titanic/data
+
+Los archivos disponibles son 3 y están en formato csv. Sus nombres son:
+
+• **train.csv**: Juego de datos de entrenamiento (etiquetado)
+• **test.csv**: Juego de datos de test
+• **gender_submission.csv**: Ejemplo a seguir en la entrega de la competición Kaggle
+
+## Juego de datos final/procesado
+  
+Se han elaborado 3 archivos finales:
+  
+• **train_processed.csv**: Juego de datos de entrenamiento procesado con etiquetas
+• **test_processed.csv**: Juego de datos de test procesado
+• **Titanic_global_sin_etiqueta.csv**: Combinación de los dos archivos anteriores sin etiquetas.
 
 
 ## Prerequesitos
