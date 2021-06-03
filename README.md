@@ -14,34 +14,26 @@ A su vez, se entregará, junto con la presente memoria, una serie de archivos co
 
 La actividad ha sido realizada por: **Olga Garcés Ciemerozum** y **Carlos Acosta Quintas**.
 
-## Ficheros del código fuente 
+## Código Fuente (ficheros) 
 
 **GarcesOlga_AcostaCarlos_PRA2.Rmd**: Archivo en lenguaje de programación R.
-
-## Informe de la práctica (ficheros)
-
-**GarcesOlga_AcostaCarlos_PRA2.pdf**: Archivo en formato PDF.
-**GarcesOlga_AcostaCarlos_PRA2.html**: Archivo en formato HTML.
-  
 
 ## Prerequesitos
 
 Este projecto se ha implementado en R-4.0.2. Se recomienda esta versión o posteriores para evitar incompatibilidades con el código fuente.<p>
 El archivo requierements.txt muestra las librerías específicas que son requeridas para poder ejecutar correctamente el proyecto.<p>
   
-Para la elaboración de la visualización del heatmap, se deberá de disponer de una API de Google Maps. Se puede obtener una siguiendo las instrucciones en https://developers.google.com/maps.<p>
-
-
 ## Instrucciones
 
 Para poder ejecutar directamente este proyecto en tu máquina local, deberás clonar todo el repositorio mediante su dirección url.<p>
-Una vez clonado, .........
+Una vez clonado, deberás abrir el archivo **GarcesOlga_AcostaCarlos_PRA2.Rmd** en RStudio y ejecutarlo.
 
+## Memoria/Informe de la práctica
 
-
-## Memoria
-
-Este proyecto dispone de una memoria con información exhaustiva y explicaciones en cuanto a la limpieza y análisis del dataset. La memoria se dispone en formato docx y pdf en la carpeta "Informe".  
+Este proyecto dispone de una memoria con información exhaustiva y explicaciones en cuanto a la limpieza y análisis del dataset. La memoria se dispone en formato pdf y HTML en la carpeta "Informe":
+  
+**GarcesOlga_AcostaCarlos_PRA2.pdf**: Archivo en formato PDF.
+**GarcesOlga_AcostaCarlos_PRA2.html**: Archivo en formato HTML.
 
 ## License
 
