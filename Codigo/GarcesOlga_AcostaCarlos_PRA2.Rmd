@@ -1913,29 +1913,21 @@ predictors<-colnames(trainX)
 ` `  
 ```{r}
 #Training the random forest model
-model_rf<-train(trainX,y=as.factor(trainy.1),method='rf',trControl=fitControl,tuneLength=9)
+#model_rf<-train(trainX,y=as.factor(trainy.1),method='rf',trControl=fitControl,tuneLength=9)
 
 #Predicting using random forest model
-validX$pred_rf<-predict(object = model_rf,validX)
+#validX$pred_rf<-predict(object = model_rf,validX)
 
 #Checking the accuracy of the random forest model
-confusionMatrix(as.factor(validy.1),validX$pred_rf)
+#confusionMatrix(as.factor(validy.1),validX$pred_rf)
 ```
 
 
 
-` `  
-` `  
+
 ```{r}
-plot(model_rf)
+#plot(model_rf)
 ```
-
-
-
-
-` `  
-` `  
-
 
 
 
