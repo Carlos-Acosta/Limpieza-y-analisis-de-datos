@@ -32,7 +32,7 @@ Una vez clonado, deberás abrir el archivo **GarcesOlga_AcostaCarlos_PRA2.Rmd** 
 
 Este proyecto dispone de una memoria con información exhaustiva y explicaciones en cuanto a la limpieza y análisis del dataset. La memoria se dispone en formato pdf y HTML en la carpeta "Informe":
   
-**GarcesOlga_AcostaCarlos_PRA2.pdf**: Archivo en formato PDF.
+**GarcesOlga_AcostaCarlos_PRA2.pdf**: Archivo en formato PDF.<p>
 **GarcesOlga_AcostaCarlos_PRA2.html**: Archivo en formato HTML.
 
 ## License
@@ -47,8 +47,3 @@ Database released under Open Data Commons Open Database License (ODbL) v1.0, ind
 4.	Jason W. Osborne (2010). Data Cleaning Basics: Best Practices in Dealing with Extreme Scores. Newborn and Infant Nursing Reviews; 10 (1): pp. 1527-3369.
 5.	Peter Dalgaard (2008). Introductory statistics with R. Springer Science & Business Media.
 6.	Wes McKinney (2012). Python for Data Analysis. O’Reilley Media, Inc.
-
-
-## Digital Object Identifier (DOI) del juego de datos
-DOI: xxxx<p>
-Link: xxxx
