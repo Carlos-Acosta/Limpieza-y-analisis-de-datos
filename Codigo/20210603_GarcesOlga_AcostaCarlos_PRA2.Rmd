@@ -51,9 +51,6 @@ library (MASS)
 library(grid)
 library(ggpubr) # Para QQ plot
 library(ggplot2) # Para graficos
-# library(stringr) #Para str_to_title()
-# library(reshape) #Para Pivot Tables
-# library(VIM) # Para kNN
 library(psych) # Para Grafico Correlaciones
 library(pastecs) #Para tabla resumen cuantitativa
 library(gmodels) #Para tabla resumen cualiativa
@@ -102,7 +99,7 @@ A su vez, se entregará, junto con la presente memoria, una serie de archivos co
 <br>
 
   
-El dataset Titanic reune los datos sobre los pasajeros que viajaban a bordo del Titanic y registra para cada persona su supervivencia o no en el accidente. El Titanic transportaba a pasajeros con gran diversidad en sus niveles de renta y edad y a bordo se encontraban familias enteras.
+El dataset **Titanic** reune los datos sobre los pasajeros que viajaban a bordo del Titanic y registra para cada persona su supervivencia o no en el accidente. El Titanic transportaba a pasajeros con gran diversidad en sus niveles de renta y edad y a bordo se encontraban familias enteras.
   
 
 La etiqueta (variable a predecir) es la variable dicotómica que indica si el viajero ha sobrevivido o no.
@@ -118,6 +115,7 @@ Los archivos disponibles son 3 y están en formato csv. Sus nombres son:
 •	test.csv  
 •	gender_submission.csv: Ejemplo a seguir en la entrega de la competición Kaggle (no útil).  
   
+<br>
 
 Según los registros, en el Titanic viajaban **2229 personas**, de las cuales 913 formaban parte de la tripulación del barco. El dataset que obtenemos de Kaggle tiene un total de **1309 registros**, por lo tanto, no todos los pasajeros que viajaban a bordo están incluidos en el dataset y podemos asumir que **el juego de datos es una muestra de toda la población a analizar**.
   
@@ -251,11 +249,7 @@ kbl(head(test),booktabs =T)%>%
   kable_styling(latex_options =c("striped","scale_down"))
 ```
   
-  
-
-
-
-
+<br>
 
 
 
@@ -340,13 +334,21 @@ Los archivos en la plataforma Kaggle no exponen ni fuentes externas ni csv adici
 <br>  
 
 
+## **Selección de los Datos**
+
+<br> 
+
+Antes de seleccionar los datos, haremos una pequeña comprobación sobre posibles duplicidades de instancias:
+
+<br> 
+
 **Comprobación de líneas duplicadas**:
 
   
 
 Comprobamos si hay líneas duplicadas en el dataframe usando `duplicated`. No existen registros duplicados, pero sí detectamos dos pares de personas con el mismo nombre. **Para asegurarnos que se trata de personas diferentes**, buscamos los registros que tengan los nombres Connolly, Miss. Kate o Kelly, Mr. James.   
   
-Podría tratarse de la misma persona que ha comprado dos billetes, pero en estos registros vemos que las personas tienen edades diferentes y no hay motivo para pensar que se trata de duplicados.  
+Podría tratarse de la misma persona que ha comprado dos billetes, pero en estos registros vemos que las personas tienen edades diferentes y **no hay motivo para pensar que se trata de duplicados**.  
   
 
 
@@ -362,7 +364,7 @@ df_total_sin_etiqueta[df_total_sin_etiqueta$Name=="Kelly, Mr. James" |
   
   
 
-## **Selección de los Datos**
+
 
 <br>
   
@@ -400,7 +402,9 @@ Cabin|Eliminación|3.1|Existencia masiva de valores nulos
 <br>
 
 Se ha detectado que **hay números de billetes duplicados**. Esto indica que hay dos tipos de tickets:
-  
+
+<br>
+
 •	**Individuales**  
 •	**Grupales**
   
@@ -483,7 +487,7 @@ kbl(ExpData(data=df_total_sin_etiqueta,type=2),booktabs =T)%>%
   kable_styling(latex_options =c("striped","scale_down"))
 ```
   
-Una vez que sabemos que tenemos valores nulos, cuántos tenemos y sabemos las variables afectadas, se decide la estrategia para imputar dichos valores.<p>
+Una vez que sabemos que **tenemos valores nulos**, cuántos tenemos y sabemos las variables afectadas, se decide la estrategia para imputar dichos valores.<p>
 
 <br>
 
@@ -491,7 +495,7 @@ Una vez que sabemos que tenemos valores nulos, cuántos tenemos y sabemos las va
   
 **Variable Cabin**:
   
-Observamos que la variable “Cabin” tiene 1014 valores nulos de 1309, por tanto, se decide eliminar dicha variable por la imposibilidad de realizar una imputación generalizada.
+Observamos que la variable “Cabin” tiene 1014 valores nulos de 1309, por tanto, **se decide eliminar dicha variable** por la imposibilidad de realizar una imputación generalizada.
 
 <br>
   
@@ -506,7 +510,7 @@ df_total_sin_etiqueta <- df_total_sin_etiqueta[keep.cols]
   
 **Variable Age**:
   
-El número de registros de Age que son NA representan aproximadamente el 20% de los registros totales. 
+El número de registros de Age que son NA representan aproximadamente el **20% de los registros totales**. 
   
 Este dataset contiene variables categóricas y numéricas y para imputar los valores nulos de la variable Age podemos usar **el método `kNN`**. Aplicamos la función e imputamos los valores NA usando todos los demás campos del dataset y con un valor de k igual a 3. El algoritmo busca los registros de los 3 pasajeros más parecidos (cercanos según la distancia Gower) al que contiene un valor nulo y usa los datos de edades de estos pasajeros para imputar el valor faltante.
   
@@ -627,7 +631,7 @@ sum(is.na(df_total_sin_etiqueta$Unit.price))
 
 **Valores extremos** 
   
-No hemos encontrado valores que estén fuera de un rango razonable. Las comprobaciones las hemos hecho anteriormente con `sapply(df, summary)`.  
+Las comprobaciones de valores extremos las hemos hecho anteriormente con `sapply(df, summary)`.  
   
 Volvemos a visualizar boxplots para las variables numéricas que tenemos: **Age** y **Unit.price**.  
 
@@ -940,9 +944,6 @@ Las personas que viajaban con hermanos o pareja en primera clase sobrevivieron e
 
 <br>
 
-**CARLOS: COMENTAMOS LA GRAFICA SEXO, CLASE, EMBARQUE O LA ELIMINAMOS? POR MI LA ELIMINAMOS, NO PROBLEM**
-
-<BR>
 
 **En función de la localización de Embarque, Clase y Sexo**
 <br>
@@ -952,14 +953,7 @@ También hemos visualizado la supervivencia en función del lugar donde los pasa
 
 <br>
   
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-ggplot(data=train, aes(x=Sex, fill=as.factor(Pclass)))+
-  geom_bar(position = 'fill')+
-  facet_wrap(~Embarked)+
-  scale_fill_manual(values=c("black", "orange", "red"))
-```
-  
-  
+
 ```{r}
 ggplot(data=train, aes(x=Embarked, fill=as.factor(Survived)))+geom_bar(position = 'fill')+
   scale_fill_manual(values=c("black", "orange", "red"))
@@ -1061,11 +1055,28 @@ OLGA: Si seguimos con lo que hemos hablado, de centrarnos en si los pasajeros vi
 #train.first.second <- train[train$Pclass==1 | train$Pclass==2,]
 #train.first.second$Pclass <- factor(train.first.second$Pclass, levels = c(1,2))
 ```
+
+<br>
+ 
+**Subconjunto Supervivientes Vs. No Supervivientes**
+
+Este subconjunto se utilizará practicamente en la totalidad de los análisis por ser la variable dependiente y principal a la pregunta realizada.<p>
+
+<br>
+
+  
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+train.survived <- train[train$Survived==1,]
+train.not.survived <- train[train$Survived==0,]
+```
  
  
 <br>
 
 **Subconjunto Hombres Vs. Mujeres**
+
+Este subconjunto nos ayudará a poder tener diferenciados los datos por la variable Sexo (hombres y mujeres) y poder realizar contrastes de hipótesis, regresiones logísticas, árboles de decisión y un modelo Random Forest.<p>
 
 <br>
  
@@ -1083,6 +1094,8 @@ train.female <- train[train$Sex=="female",]
 
 **Subconjunto Jóvenes (<18 años) Vs. Adultos**
 
+Este subconjunto nos ayudará a poder tener diferenciados los datos por la variable Age (menores y adultos) y poder realizar contrastes de hipótesis, regresiones logísticas, árboles de decisión y un modelo Random Forest.<p>
+
 <br>
 
 
@@ -1095,21 +1108,10 @@ train.older <- train[train$Age>=18,]
 
 <br>
 
-**Subconjunto Supervivientes Vs. No Supervivientes**
-
-<br>
-
-  
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-train.survived <- train[train$Survived==1,]
-train.not.survived <- train[train$Survived==0,]
-```
-
-
-<br>
 
 **Subconjunto Billete Único Vs. Billete Grupal**
+
+Este subconjunto nos ayudará a poder tener diferenciados los datos por la variable Count.ticket (únicos o grupales) y poder realizar contrastes de hipótesis (incluyendo un Xi cuadrado), regresiones logísticas, árboles de decisión y un modelo Random Forest.<p>
 
 <br>
 
@@ -2188,19 +2190,12 @@ predictors<-colnames(trainX)
 
 
 
-
-## **Including Plots**
-
-  
-  
-
-
 ******
 # **Representación de resultados**
 ******
   
   
-
+Una vez obtenido el juego de datos en su totalidad (train + test), y sabiendo que el propio juego de datos es una muestra solamente del juego de datos completo, es lógico realizar/calcular estadísticos en base a este juego de datos combinado train/test **para obtener un mayor conocimiento de las distribuciones y comportamientos de sus variables**.
 
 
 ## **Tabla resumen de las variables cualitativas (datos completos: train + test)**
@@ -2295,12 +2290,6 @@ kable(df_var_cualitativa_table, digits = c(0,0,3),
 ```
 
   
-  
-
-
-
-
-
 ## **Tabla resumen de las variables cuantitativas (datos completos: train + test)**
 
   
@@ -2403,12 +2392,6 @@ df_var_cuantitativa_tabla <- data.frame(t(df_var_cuantitativa_tabla))
 
   
   
-
-
-
-
-
-
 ```{r echo=TRUE, message=FALSE, warning=FALSE, include=TRUE}
 
 # Creación de la tabla mediante kable()
@@ -2470,12 +2453,99 @@ kable(df_var_cuantitativa_tabla,digits = c(2, 2, 2, 3),
 
   
   
+**CARLOS: UNA VEZ CORRAMOS POR ULTIMA VEZ EL CODIGO, PODEMOS ACTUALIZAR EL TEXTO DE LA TABLA Y PONER LOS RESULTADOS GRÄFICOS DEL ARBOL CON MEJOR PRECISION Y EL DEL RANDOM FOREST**
+
+
+## **Resultado de la comprobación de la normalidad y homogeneidad de la varianza**
 
 
 
 
+<br>
 
-  
+Variable | Variable Dependiente | P-Value | Resultado
+-------- | --------------| ----- | -----------------------------------
+Age|Survived|0.15|Las varianzas en la edad de los pasajeros en función de la supervivencia son iguales
+Unit.price|Survived|3.73e-14|Las varianzas en el precio unitario de los pasajeros en función de la supervivencia son diferentes
+SibSp|Survived|2.2e-16|Las varianzas en SibSp dde los pasajeros en función de la supervivencia son diferentes
+Parch|Survived|0.1908|Las varianzas en Parch de los pasajeros en función de la supervivencian son iguales
+Count.ticket|Survived|3.459e-09|Las varianzas en la edad de los pasajeros en función de la supervivencia son diferentes	
+
+<br>
+
+
+
+
+## **Gráfico de las correlaciones**
+<br>
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+# Relaciones cruzadas de las variables cuantitativas (correlaciones) para todos los datos.
+col_var_cuantitativa_sin_ID <- c("Age", "SibSp", "Parch", "Count.ticket", "Unit.price")
+
+df_var_cuantitativa <- df_total_sin_etiqueta[, col_var_cuantitativa_sin_ID]
+
+pairs.panels(df_var_cuantitativa[,col_var_cuantitativa_sin_ID], 
+             method = "pearson", 
+             hist.col = "grey",
+             density = TRUE,  
+             ellipses = TRUE 
+             )
+
+```
+
+
+<br>
+
+
+## **Resultado de los Contrastes de Hipótesis**
+
+<br>
+
+Variable | Variable | Tipo Contraste | P-value | Resultado
+-------- | --------------| ----- | ----- | -----------------------------------
+Sex(hombres/mujeres)|Survived|Proporción Supervivencia|XXXXX|XXXXXX
+Age(menores/adultos)|Survived|Proporción Supervivencia|XXXXX|XXXXXX
+Tipo Billete (único/conjunto)|Survived|Proporción Supervivencia|XXXXX|XXXXXX
+
+
+<br>
+
+## **Resultado del estudio de independencia del Contraste Xi Cuadrado**
+
+<br>
+
+Variable | Variable | Tipo Contraste | P-value | Resultado
+-------- | --------------| ----- | ----- | -----------------------------------
+Tipo Billete (único/conjunto)|Survived|Xi Cuadrado|7.375e-14|Las variables Tipo Billete y Survived están relacionadas
+PClass (1/2/3)|Survived|Xi Cuadrado|2.2e-16|Las variables Survived y Pclass están relacionadas	
+
+<br>
+
+
+
+## **Resultado de las regresiones logísticas**
+
+Variables Significativas | P-Value | Resultado
+-------- | -------------- |-----------------------------------
+XXX|XXX| XXXXXXXXXXXXXXXXXXXXX
+XXX|XXX| XXXXXXXXXXXXXXXXXXXXX
+XXX|XXX| XXXXXXXXXXXXXXXXXXXXX
+
+<br>
+
+
+
+## **Resultado Gráfico Árbol de decisión**
+
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+
+## **Resultado Gráfico Random Forest**
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX  
   
 ******
 # **Resolución del problema**
@@ -2605,20 +2675,47 @@ Tras realizar una inspección visual, aplicar métodos de estadística inferenci
 - En caso de los hombres, la supervivencia era mayor para niños.<p>
 - En el caso de las mujeres, no fue tan importante la edad como la clase en la que viajaban. Las mujeres de primera y segunda clase sobrevivieron en su mayoría.  
 
-* Las personas que viajaban con uno o más acompañantes también sobrevivieron en mayor proporción.  
+* Las personas que viajaban con uno o más acompañantes también sobrevivieron en mayor proporción.<p>
 
 
+
+En definitiva, **el juego de datos nos ayuda a responder el problema/pregunta principal planteada en cuanto a los factores influyentes en la supervivencia del accidente del Titanic**<p>
+
+Los análisis mostrados reflejan qué y cómo pudieron influir los diferentes factores en la supervivencia de los viajeros.<p>
 
 
 
 
 ******
-# **Creación del archivo preprocesado**
+# **Código y archivos CSV resultantes del proceso de limpieza**
 ******
-  
-  
-  
-  
+
+<br>
+
+**Código** 
+ 
+El código empleado en la realización de este proyecto se ha mantenido visible para su potencial estudio y uso si fuera el caso.<p>
+
+<br>
+
+**Archivos CSV procesados** 
+
+Se han elaborado 3 archivos finales:
+
+• train_processed.csv: Juego de datos de entrenamiento procesado con etiquetas
+
+• test_processed.csv: Juego de datos de test procesado
+
+• Titanic_global_sin_etiqueta.csv: Combinación de los dos archivos anteriores sin etiquetas.
+
+<br>
+
+**Repositorio** 
+
+Tanto el código como los resultados (output) y los archivos resultantes del proceso de limpieza están disponibles en el siguiente repositorio:
+
+
+https://github.com/Carlos-Acosta/Limpieza-y-analisis-de-datos<p>
 
 
 ******
