@@ -16,24 +16,34 @@ La actividad ha sido realizada por: **Olga Garcés Ciemerozum** y **Carlos Acost
 
 ## Código Fuente (ficheros) 
 
-**GarcesOlga_AcostaCarlos_PRA2.Rmd**: Archivo en lenguaje de programación R.
+**GarcesOlga_AcostaCarlos_PRA2.Rmd**: Archivo en lenguaje de programación R:<p>
+
+Este archivo contiene la totalidad del código utilizado en el presente proyecto, tanto las explicaciones de las acciones realizadas como los outputs y resultados esperados.<p>
+
+## Memoria/Informe de la práctica
+
+Este proyecto dispone de una memoria con información exhaustiva y explicaciones en cuanto a la limpieza y análisis del dataset.<p>
+La memoria se dispone en formato pdf y HTML en la carpeta "Informe", y los nombres de los archivos son:
+  
+**GarcesOlga_AcostaCarlos_PRA2.pdf**: Archivo en formato PDF.<p>
+**GarcesOlga_AcostaCarlos_PRA2.html**: Archivo en formato HTML.
+
 
 ## Prerequesitos
+  
+Versión del lenguaje de programación:<p>
 
 Este projecto se ha implementado en R-4.0.2. Se recomienda esta versión o posteriores para evitar incompatibilidades con el código fuente.<p>
-El archivo requierements.txt muestra las librerías específicas que son requeridas para poder ejecutar correctamente el proyecto.<p>
+ 
+Archivo de requerimientos (librerías a implementar para la ejecución del código):<p>
+  
+El archivo **requierements.txt** muestra las librerías específicas que son requeridas para poder ejecutar correctamente el proyecto.<p>
   
 ## Instrucciones
 
 Para poder ejecutar directamente este proyecto en tu máquina local, deberás clonar todo el repositorio mediante su dirección url.<p>
 Una vez clonado, deberás abrir el archivo **GarcesOlga_AcostaCarlos_PRA2.Rmd** en RStudio y ejecutarlo.
 
-## Memoria/Informe de la práctica
-
-Este proyecto dispone de una memoria con información exhaustiva y explicaciones en cuanto a la limpieza y análisis del dataset. La memoria se dispone en formato pdf y HTML en la carpeta "Informe":
-  
-**GarcesOlga_AcostaCarlos_PRA2.pdf**: Archivo en formato PDF.<p>
-**GarcesOlga_AcostaCarlos_PRA2.html**: Archivo en formato HTML.
 
 ## License
 
