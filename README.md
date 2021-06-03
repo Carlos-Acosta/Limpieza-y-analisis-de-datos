@@ -16,13 +16,17 @@ La actividad ha sido realizada por: **Olga Garcés Ciemerozum** y **Carlos Acost
 
 ## Ficheros del código fuente 
 
-* **xxx.yyy**: xxxx.
+**GarcesOlga_AcostaCarlos_PRA2.Rmd**: Archivo en lenguaje de programación R.
 
+## Informe de la práctica (ficheros)
 
+**GarcesOlga_AcostaCarlos_PRA2.pdf**: Archivo en formato PDF.
+**GarcesOlga_AcostaCarlos_PRA2.html**: Archivo en formato HTML.
+  
 
 ## Prerequesitos
 
-Este projecto se ha implementado en Python 3.8.8. Se recomienda esta versión o posteriores para evitar incompatibilidades con el código fuente.<p>
+Este projecto se ha implementado en R-4.0.2. Se recomienda esta versión o posteriores para evitar incompatibilidades con el código fuente.<p>
 El archivo requierements.txt muestra las librerías específicas que son requeridas para poder ejecutar correctamente el proyecto.<p>
   
 Para la elaboración de la visualización del heatmap, se deberá de disponer de una API de Google Maps. Se puede obtener una siguiendo las instrucciones en https://developers.google.com/maps.<p>
