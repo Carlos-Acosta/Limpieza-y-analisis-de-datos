@@ -27,7 +27,7 @@ Este proyecto dispone de una memoria con información exhaustiva y explicaciones
 La memoria se dispone en formato pdf y HTML en la carpeta "Informe", y los nombres de los archivos son:
   
 • **GarcesOlga_AcostaCarlos_PRA2.pdf**: Archivo en formato PDF.<p>
-• **GarcesOlga_AcostaCarlos_PRA2.html**: Archivo en formato HTML.
+• **GarcesOlga_AcostaCarlos_PRA2.html**: Archivo en formato HTML.<p>
   
 ## Juego de datos original
   
@@ -39,17 +39,17 @@ https://www.kaggle.com/c/titanic/data
 
 Los archivos disponibles son 3 y están en formato csv. Sus nombres son:
 
-• **train.csv**: Juego de datos de entrenamiento (etiquetado)
-• **test.csv**: Juego de datos de test
-• **gender_submission.csv**: Ejemplo a seguir en la entrega de la competición Kaggle
+• **train.csv**: Juego de datos de entrenamiento (etiquetado)<p>
+• **test.csv**: Juego de datos de test<p>
+• **gender_submission.csv**: Ejemplo a seguir en la entrega de la competición Kaggle<p>
 
 ## Juego de datos final/procesado
   
 Se han elaborado 3 archivos finales:
   
-• **train_processed.csv**: Juego de datos de entrenamiento procesado con etiquetas
-• **test_processed.csv**: Juego de datos de test procesado
-• **Titanic_global_sin_etiqueta.csv**: Combinación de los dos archivos anteriores sin etiquetas.
+• **train_processed.csv**: Juego de datos de entrenamiento procesado con etiquetas<p>
+• **test_processed.csv**: Juego de datos de test procesado<p>
+• **Titanic_global_sin_etiqueta.csv**: Combinación de los dos archivos anteriores sin etiquetas.<p>
 
 
 ## Prerequesitos
