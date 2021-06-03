@@ -992,70 +992,6 @@ La pregunta que planteamos inicialmente es si entre las variables que tenemos en
 Vamos a usar estos datos para analizar el dataset en mayor profundidad. Para ello necesitamos datasets especializados.  
 
 
-OLGA: Si seguimos con lo que hemos hablado, de centrarnos en si los pasajeros viajan solos o no, debemos separar estos 3 pares de datasets.**las variables sibsp, parch están como factor, voy a comentar la parte donde se les transforma en factor..** 
-**CARLOS: OK**
-
-
-<br>
-
-**CARLOS: BORRAR, OK?**
-
-<br>
-
-
-  
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-# Dataframe por pasajeros que viajaban solos o acompañados
-#train.single <- train[train$Count.ticket=="1",]
-#train.many <- train[train$Count.ticket>1,]
-```
- 
- 
-<br>
-
-**CARLOS: BORRAR, OK?**
-
-<br>
-
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-# Dataframe por pasajeros que viajaban solos o acompañados
-#train.spouse <- train[train$SibSp>0,]
-#train.not.spouse <- train[train$sibsp==0,]
-```
-  
-
-<br>
-
-**CARLOS: BORRAR, OK?**
-
-<br> 
-  
-  
-  
-  
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-# Dataframe por pasajeros que viajaban solos o acompañados
-#train.children <- train[train$Parch>10,]
-#train.no.children <- train[train$Parch==0,]
-```
-
-
-<br>
-
-**CARLOS: BORRAR, OK?**
-
-<br>
-
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-# Dataframes por clase de pasajero
-#train.first <- train[train$Pclass==1,]
-#train.second <- train[train$Pclass==2,]
-#train.first.second <- train[train$Pclass==1 | train$Pclass==2,]
-#train.first.second$Pclass <- factor(train.first.second$Pclass, levels = c(1,2))
-```
-
 <br>
  
 **Subconjunto Supervivientes Vs. No Supervivientes**
@@ -1125,7 +1061,21 @@ train$ticket_tipo[train$Count.ticket!=1] = "Grupal"
 train$ticket_tipo <- as.factor(train$ticket_tipo)
 ```
 
+<br>
 
+**OLGA en el anterior creas una columna, aquí necesitamos partir los datos en dos grupos de personas solas o acompañadas.**
+Usaremos estos datos para realizar el contraste de hipótesis sobre la proporción de supervivientes entre los pasajeros que viajaban solos frente a los pasajeros que viajaban acompañados.  
+
+<br>
+  
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Dataframe por pasajeros que viajaban solos o acompañados
+train.single <- train[train$Count.ticket=="1",]
+train.many <- train[train$Count.ticket>1,]
+```
+ 
+ 
+<br>
 
 
 <br> 
@@ -1433,6 +1383,7 @@ El precio unitario del billete (**Unit.price**) versus la edad (**Age**), indica
 
 
 **CARLOS: ENTIENDO QUE CAMBIARAS COSAS.MIRA QUE LOS COMENTARIOS CONCUERDEN SI CAMBIAS ALGO, PLEASE**
+**OLGA: he hecho cambios, he comentado todo según los resultados, he cambiado un poco la formulación de las hipótesis. Tu código lo he dejado comentado, por si acaso**
 
 **2. --> Contrastes de hipótesis**
 
@@ -1440,24 +1391,27 @@ El precio unitario del billete (**Unit.price**) versus la edad (**Age**), indica
 **Contraste de hipótesis sobre el sexo y nivel de supervivencia**
 
   
-¿La proporción de supervivencia en hombres es inferior a la de las mujeres?  
+**¿La proporción de supervivencia en hombres es inferior a la de las mujeres?**  
 
-  
+<br>
 Acorde con la pregunta planteada, realizaremos un contraste de hipótesis con las siguientes hipótesis de partida:  
-  
-**Hipótesis nula - H0**: La proporción de hombres que sobreviven es igual o mayor a 50% -> H0: p >= p0, siendo p0 = 0.5  
-**Hipótesis alternativa - H1**: La proporción de hombres es menor a 50% -> H1: p < p0, siendo po = 0.5  
-  
-Este contraste de hipótesis representa un test de la proporción de la población por la cola izquierda, por tanto, el valor p0 representará, bajo la hipótesis nula, el límite inferior de la supuesta verdadera proporción de la población.  
+<br>
+**Hipótesis nula - H0**: La proporción de hombres que sobreviven es igual o mayor a la proporción de mujeres que sobreviven  
+**Hipótesis alternativa - H1**: La proporción de hombres que sobreviven es menor que la proporción de mujeres que sobreviven  
+
+H0: p.m >= p.f   
+H1: p.m < p.f  
+<br>
+Este contraste de hipótesis representa un test de la proporción de la población por la cola izquierda, por tanto, el valor zcrit.R representará, bajo la hipótesis nula, el límite inferior de la supuesta verdadera proporción de la población.  
 Este contraste rechazará la HO si el estadístico calculado es menor o igual al valor crítico (con signo negativo) al nivel de significación estimado.  
-  
-El hecho que la proporción de hombres que sobreviven sea menor que 0.5, implicaría que la proporción de hombres que sobreviven es inferior a la de las mujeres.  
-  
-Debido a que es un contraste de hipótesis sobre proporción de una muestra, y esta muestra es considerada grande (n > 30), podremos definir un estadístico de contraste como una observación de una variable aleatoria que se distribuye aproximadamente como una N(0,1).  
-  
+<br>
+Aceptar la hipótesis nula implicará aceptar que los hombres sobrevivieron al menos en la misma proporción que las mujeres. En cambio, aceptar la hipótesis alternativa indicaría que los hombres sobrevivieron en menor proporcion que las mujeres.  
+<br>
+El tamaño de la muestra es los suficientemente grande para poder asumir que la proporción muestral para la población de hombres sigue una distribución normal con media p.m y desviación estándar `sqrt(p.m(1-p.m) / n.m)`. De forma análoga se determina la media y desviación estándar para la proporción muestral de las mujeres.  
+<br>
 Debido al planteamiento de la hipótesis nula y su alternativa y por cómo se han descrito las hipótesis H0 y H1, se observa que la hipótesis alternativa es unilateral, puesto que se plantea como un límite a un solo valor dado.  
 
-  
+<br>
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 # Fijamos un nivel de significación
@@ -1465,186 +1419,391 @@ Debido al planteamiento de la hipótesis nula y su alternativa y por cómo se ha
 alfa <- 0.05
 ```
 
- 
-  
+` ` 
+<br>
 Determinamos el estadístico de contraste, en este caso, la muestra es grande y proviene de una distribución de Bernoulli de parámetro p, con lo cual, según el Teorema del Límite Central podremos utilizar el estadístico de contraste mostrado anteriormente.  
-**OLGA: igual me equivoco, pero n_Sex_M/n_Sex es el número de hombres supervivientes frente al total de supervivientes. Yo creo que tiene que ser hombres supervivientes / hombres (supervivientes o no). Esto te da el porcentaje de hombres que sobrevivieron entre los hombres que viajaban. Lo que calculaste te da el porcentaje de hombres que sobrevivieron entre todos los pasajeros que sobrevivieron. Digamos viajaban 100 hombres y 900 mujeres y se salvaron todos los hombres y 300 mujeres. La proporción de hombres que sobrevivieron en este caso debería ser 100% porque todos sobrevivieron, y creo que con el cálculo que has hecho el porcentaje sería 25%. Ilustro con un plot y luego lo puedes quitar: n_Sex_M/length(train.male$Sex) son 19% y n_Sex_M/n_Sex son 31%. He dejado comentario en el código. Lo mismo con los demás contrastes.**
 
-**CARLOS: OK**
-
-  
+<br>
 
 ```{r}
-ggplot(data=train, aes(x=Sex, fill=as.factor(Survived)))+geom_bar(position = 'fill')
-```
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-# Determinación del estadístico de contraste
-
 train.survived_M <- train.survived[train.survived$Sex=="male",]
 train.survived_F <- train.survived[train.survived$Sex=="female",]
 
-n_Sex <- length(train.survived$Sex)
 
-n_Sex_M <- length(train.survived_M$Sex)
+n.m <- length(train.male$Sex)
+n.f <- length(train.female$Sex)
 
-n_Sex_F <- length(train.survived_F$Sex)
+# Proporción de supervivientes entre hombres
+p.m <- length(train.survived_M$Sex) / n.m
 
-# Proporción muestral de hombres
-p_hat <- n_Sex_M/n_Sex
-# Olga reemplazar n_Sex por length(train.male$Sex)
-# p_hat <- n_Sex_M/length(train.male$Sex)
+# Proporción de supervivientes entre mujeres
+p.f <- length(train.survived_F$Sex) / n.f
 
-# Proporción hipotesis nula
-p_0 <- 0.5
+# Parámetro p
+p<-(n.m*p.m + n.f*p.f) / (n.m+n.f)
 
-# Estadístico empleado z_p
-z_p = (p_hat - p_0)/sqrt(p_0 * (1 - p_0)/n_Sex) 
+# Estadístico observado
+zobs <- (p.m-p.f)/( sqrt(p*(1-p)*(1/n.m+1/n.f)) ) 
 
-# Cálculo de valores críticos para el valor de significación asignado
-z_p.alfa = qnorm(1-alfa) 
+# Valor crítico
+zcrit.L <- qnorm(alfa,  lower.tail=TRUE)
 
-# Cálculo del valor P en nuestro contraste de hipótesis
-valor_p_Sex = pnorm(z_p) 
- 
-kbl(data.frame(n_Sex,
-           n_Sex_M,
-           n_Sex_F,
-           p_hat,
-           p_0, z_p,
-           -z_p.alfa,
-           valor_p_Sex),booktabs =T)%>%
+# valor p
+pvalue<- pnorm(zobs, lower.tail=TRUE )
+
+# Resultado
+kbl(data.frame(zobs,  zcrit.L, pvalue, p.m, p.f, n.m, n.f),booktabs =T)%>%
   kable_styling(latex_options =c("striped"))
+
 ```
 
-  
-<br>  
+
+Tal y como se ha planteado H0 y H1, siendo H1 p.m < p.f, rechazamos H0 si el valor del estadístico zobs es menor que el valor crítico (en signo negativo). El resultado del contraste es **-16.22** < **-1.64** y esto nos permite rechazar H0 a favor de H1 con un nivel de confianza (1-alfa) igual al 95%: la hipótesis alternativa afirma que **la proporción de supervivencia en hombes es menor que la proporción de supervivencia en mujeres**.    
 
 
-
-Tal y como se ha planteado H0 y H1, siendo H1 p < 0.5, rechazaremos H0 si el valor del estadístico z_p es menor que el valor crítico (en signo negativo), siendo este el caso -6.70 < -1.64.  
-
-  
-Según el estadístico de contraste utilizado y el valor crítico calculado, al ser el primero (**-6.70**) menor que el segundo (**-1.64**), al 0.05 de nivel de significancia, podemos rechazar la hipótesis nula de que la proporción de supervivencia en hombres es mayor o igual a 50% respecto al de las mujeres.  
-  
+<br>
 De igual forma, al ser valor p casi nulo y por tanto menor que nuestro nivel de significación (0.05), el valor p es significativo y podemos rechazar, confirmando el contraste anterior, la hipótesis nula.  
-  
+<br>
+
+<br>
 
 Siguiendo la misma metodología, responderemos a las siguientes preguntas:
 
 
- <br> 
-  
+<br>
+` ` 
+**Contraste de hipótesis sobre la edad y nivel de supervivencia**
+
 **¿La proporción de supervivencia en menores es inferior a la de los mayores?**  
 
 <br>
-  
-**Hipótesis nula - H0**: La proporción de menores que sobreviven es igual o mayor a 50% -> H0: p >= p0, siendo po = 0.5  
-**Hipótesis alternativa - H1**: La proporción de menores es menor a 50% -> H1: p < p0, siendo po = 0.5  
-  
+**Hipótesis nula - H0**: La proporción de menores que sobreviven es igual o mayor a la proporción de adultos que sobreviven  
+**Hipótesis alternativa - H1**: La proporción de menores que sobreviven es menor que la proporción de adultos que sobreviven  
 
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-# Determinación del estadístico de contraste
+H0: p.y >= p.o   
+H1: p.y < p.o 
 
+<br>
+
+```{r}
 train.survived_Y <- train.survived[train.survived$Age<18,]
 train.survived_O <- train.survived[train.survived$Age>=18,]
 
-n_Age <- length(train.survived$Age)
-n_Age_Y <- length(train.survived_Y$Age)
-n_Age_O <- length(train.survived_O$Age)
 
-# Proporción muestral de menores
-p_hat <- n_Age_Y/n_Age
+n.y <- length(train.young$Age)
+n.o <- length(train.older$Age)
 
-# Proporción hipotesis nula
-p_0 <- 0.5
+# Proporción de supervivientes entre hombres
+p.y <- length(train.survived_Y$Age) / n.y
 
-# Estadístico empleado z_p
-z_p = (p_hat - p_0)/sqrt(p_0 * (1 - p_0)/n_Age) 
+# Proporción de supervivientes entre mujeres
+p.o <- length(train.survived_O$Age) / n.o
 
-# Cálculo de valores críticos para el valor de significación asignado
-z_p.alfa = qnorm(1-alfa) 
+# Parámetro p
+p<-(n.y*p.y + n.o*p.o) / (n.y+n.o)
 
-# Cálculo del valor P en nuestro contraste de hipótesis
-valor_p_Age = pnorm(z_p) 
+# Estadístico observado
+zobs <- (p.y-p.o)/( sqrt(p*(1-p)*(1/n.y+1/n.o)) ) 
 
+# Valor crítico
+zcrit.L <- qnorm(alfa,  lower.tail=TRUE)
 
+# valor p
+pvalue<- pnorm(zobs, lower.tail=TRUE )
 
-
-kbl(data.frame(n_Age,
-           n_Age_Y,
-           n_Age_O,
-           p_hat,
-           p_0,
-           z_p,
-           -z_p.alfa,
-           valor_p_Age),booktabs =T)%>%
+# Resultado
+kbl(data.frame(zobs,  zcrit.L, pvalue, p.y, p.o, n.y, n.o),booktabs =T)%>%
   kable_styling(latex_options =c("striped"))
+
 ```
 
-  
-<br>  
+Obtenemos que el valor crítico (**-1.64**) es menor que el estadístico observado (**3.75**), por lo tanto se sitúa en el rango de aceptación de H0. Por lo tanto, con un nivel de confianza del 95% debemos aceptar la hipótesis nula que indica que **la proporción de personas menores de 18 años que sobrevivieron en el accidente es al menos igual (o mayor) que la proporción de mayores de 18 años que sobrevivieron**.   
+
+<br>
+De igual forma, al ser valor p=1 mayor que alfa, si rechazamos la hipótesis nula, posiblemente estaremos comentiendo un error.
 
 
-
-Según el estadístico de contraste utilizado y el valor crítico calculado, al ser el primero (**-10.92**) menor que el segundo (**-1.64**), al 0.05 de nivel de significancia, podemos rechazar la hipótesis nula de que la proporción de supervivencia en hombres es mayor o igual a 50% respecto al de las mujeres.  
-  
-De igual forma, al ser valor p casi nulo y por tanto menor que nuestro nivel de significación (0.05), el valor p es significativo y podemos rechazar, confirmando el contraste anterior, la hipótesis nula.  
-
-<br> 
-  
-
-**¿La proporción de supervivencia en viajeros con billete único es inferior a la de los viajeros con billete en conjunto?**
-  
 <br>
 
-**Hipótesis nula - H0**: La proporción de viajeros con billete único que sobreviven es igual o mayor a 50% -> H0: p >= p0, siendo po = 0.5  
-**Hipótesis alternativa - H1**: La proporción de viajeros con billete único es menor a 50% -> H1: p < p0, siendo po = 0.5  
 
-  
-```{r echo=TRUE, message=FALSE, warning=FALSE}
+**Contraste de hipótesis sobre el el tipo de billete (único o grupal) y nivel de supervivencia**
+<br>
+
+**¿La proporción de supervivencia en viajeros con billete único es inferior a la de los viajeros con billete en conjunto?**
+<br>
+
+**Hipótesis nula - H0**: La proporción de supervivientes que viajaban solos es igual o mayor a la proporción de supervivientes que viajaban acompañados.    
+**Hipótesis alternativa - H1**: La proporción de supervivientes que viajaban solos es menor que la proporción de supervivientes que viajaban acompañados.  
+
+H0: p.s >= p.my   
+H1: p.s < p.my 
+
+
+
+<br>
+
+```{r}
 # Determinación del estadístico de contraste
 
 train.survived_S <- train.survived[train.survived$Count.ticket==1,]
 train.survived_My <- train.survived[train.survived$Count.ticket>1,]
 
-n_Count.ticket <- length(train.survived$Count.ticket)
-n_Count.ticket_S <- length(train.survived_S$Count.ticket)
-n_Count.ticket_My <- length(train.survived_My$Count.ticket)
+n.s <- length(train.single$Count.ticket)
+n.my <- length(train.many$Count.ticket)
 
-# Proporción muestral de menores
-p_hat <- n_Count.ticket_S/n_Count.ticket
+# Proporción de supervivientes entre hombres
+p.s <- length(train.survived_S$Count.ticket) / n.s
 
-# Proporción hipotesis nula
-p_0 <- 0.5
+# Proporción de supervivientes entre mujeres
+p.my <- length(train.survived_My$Count.ticket) / n.my
 
-# Estadístico empleado z_p
-z_p = (p_hat - p_0)/sqrt(p_0 * (1 - p_0)/n_Count.ticket) 
+# Parámetro p
+p<-(n.s*p.s + n.my*p.my) / (n.s+n.my)
 
-# Cálculo de valores críticos para el valor de significación asignado
-z_p.alfa = qnorm(1-alfa) 
+# Estadístico observado
+zobs <- (p.s-p.my)/( sqrt(p*(1-p)*(1/n.s+1/n.my)) ) 
 
-# Cálculo del valor P en nuestro contraste de hipótesis
-valor_p_Count.ticket = pnorm(z_p) 
+# Valor crítico
+zcrit.L <- qnorm(alfa,  lower.tail=TRUE)
 
-kbl(data.frame(n_Count.ticket,
-           n_Count.ticket_S,
-           n_Count.ticket_My,
-           p_hat,
-           p_0,
-           z_p,
-           -z_p.alfa,
-           valor_p_Count.ticket),booktabs =T)%>%
-  kable_styling(latex_options =c("striped","scale_down"))
+# valor p
+pvalue<- pnorm(zobs, lower.tail=TRUE )
+
+# Resultado
+kbl(data.frame(zobs,  zcrit.L, pvalue, p.y, p.o, n.y, n.o),booktabs =T)%>%
+  kable_styling(latex_options =c("striped"))
+
 ```
 
-  
-<br> 
- 
+<br>
 
-Según el estadístico de contraste utilizado y el valor crítico calculado, al ser el primero (**-4.43**) menor que el segundo (**-1.64**), al 0.05 de nivel de significancia, podemos rechazar la hipótesis nula de que la proporción de supervivencia en hombres es mayor o igual a 50% respecto al de las mujeres.  
-  
-De igual forma, al ser valor p casi nulo y por tanto menor que nuestro nivel de significación (0.05), el valor p es significativo y podemos rechazar, confirmando el contraste anterior, la hipótesis nula.   
+Para aceptar H0 el estadístico observado tendría que ser mayor que el valor crítico, dado el contraste por la izquierda. El valor del estadístico observado (**-7.55**) es menor que el valor crítico (**-1.64**), el estadístico observado se encuentra fuera del rango de aceptación de H0, por lo tanto, debemos rechazar la hipótesis nula a favor de la alternativa: **con un nivel de confianza del 95% podemos afirmar que la proporción de supervivientes entre los pasajeros que viajaban solos es menor que la proporción de supervivientes entre los pasajeros que viajaban acompañados**.  
+<br>
+
+El valor bajo de p-value confima la conclusión que hemos extraido anteriormente, podemos aceptar H1.  
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ¿La proporción de supervivencia en hombres es inferior a la de las mujeres?   -->
+
+
+<!-- Acorde con la pregunta planteada, realizaremos un contraste de hipótesis con las siguientes hipótesis de partida:   -->
+
+<!-- **Hipótesis nula - H0**: La proporción de hombres que sobreviven es igual o mayor a 50% -> H0: p >= p0, siendo p0 = 0.5   -->
+<!-- **Hipótesis alternativa - H1**: La proporción de hombres es menor a 50% -> H1: p < p0, siendo po = 0.5   -->
+
+<!-- Este contraste de hipótesis representa un test de la proporción de la población por la cola izquierda, por tanto, el valor p0 representará, bajo la hipótesis nula, el límite inferior de la supuesta verdadera proporción de la población.   -->
+<!-- Este contraste rechazará la HO si el estadístico calculado es menor o igual al valor crítico (con signo negativo) al nivel de significación estimado.   -->
+
+<!-- El hecho que la proporción de hombres que sobreviven sea menor que 0.5, implicaría que la proporción de hombres que sobreviven es inferior a la de las mujeres.   -->
+
+<!-- Debido a que es un contraste de hipótesis sobre proporción de una muestra, y esta muestra es considerada grande (n > 30), podremos definir un estadístico de contraste como una observación de una variable aleatoria que se distribuye aproximadamente como una N(0,1).   -->
+
+<!-- Debido al planteamiento de la hipótesis nula y su alternativa y por cómo se han descrito las hipótesis H0 y H1, se observa que la hipótesis alternativa es unilateral, puesto que se plantea como un límite a un solo valor dado.   -->
+
+
+
+<!-- ```{r echo=TRUE, message=FALSE, warning=FALSE} -->
+<!-- # Fijamos un nivel de significación -->
+
+<!-- alfa <- 0.05 -->
+<!-- ``` -->
+
+
+
+<!-- Determinamos el estadístico de contraste, en este caso, la muestra es grande y proviene de una distribución de Bernoulli de parámetro p, con lo cual, según el Teorema del Límite Central podremos utilizar el estadístico de contraste mostrado anteriormente.   -->
+<!-- **OLGA: igual me equivoco, pero n_Sex_M/n_Sex es el número de hombres supervivientes frente al total de supervivientes. Yo creo que tiene que ser hombres supervivientes / hombres (supervivientes o no). Esto te da el porcentaje de hombres que sobrevivieron entre los hombres que viajaban. Lo que calculaste te da el porcentaje de hombres que sobrevivieron entre todos los pasajeros que sobrevivieron. Digamos viajaban 100 hombres y 900 mujeres y se salvaron todos los hombres y 300 mujeres. La proporción de hombres que sobrevivieron en este caso debería ser 100% porque todos sobrevivieron, y creo que con el cálculo que has hecho el porcentaje sería 25%. Ilustro con un plot y luego lo puedes quitar: n_Sex_M/length(train.male$Sex) son 19% y n_Sex_M/n_Sex son 31%. He dejado comentario en el código. Lo mismo con los demás contrastes.** -->
+
+<!-- **CARLOS: OK** -->
+
+
+
+<!-- ```{r} -->
+<!-- ggplot(data=train, aes(x=Sex, fill=as.factor(Survived)))+geom_bar(position = 'fill') -->
+<!-- ``` -->
+
+<!-- ```{r echo=TRUE, message=FALSE, warning=FALSE} -->
+<!-- # Determinación del estadístico de contraste -->
+
+<!-- train.survived_M <- train.survived[train.survived$Sex=="male",] -->
+<!-- train.survived_F <- train.survived[train.survived$Sex=="female",] -->
+
+<!-- n_Sex <- length(train.survived$Sex) -->
+
+<!-- n_Sex_M <- length(train.survived_M$Sex) -->
+
+<!-- n_Sex_F <- length(train.survived_F$Sex) -->
+
+<!-- # Proporción muestral de hombres -->
+<!-- p_hat <- n_Sex_M/n_Sex -->
+<!-- # Olga reemplazar n_Sex por length(train.male$Sex) -->
+<!-- # p_hat <- n_Sex_M/length(train.male$Sex) -->
+
+<!-- # Proporción hipotesis nula -->
+<!-- p_0 <- 0.5 -->
+
+<!-- # Estadístico empleado z_p -->
+<!-- z_p = (p_hat - p_0)/sqrt(p_0 * (1 - p_0)/n_Sex)  -->
+
+<!-- # Cálculo de valores críticos para el valor de significación asignado -->
+<!-- z_p.alfa = qnorm(1-alfa)  -->
+
+<!-- # Cálculo del valor P en nuestro contraste de hipótesis -->
+<!-- valor_p_Sex = pnorm(z_p)  -->
+
+<!-- kbl(data.frame(n_Sex, -->
+<!--            n_Sex_M, -->
+<!--            n_Sex_F, -->
+<!--            p_hat, -->
+<!--            p_0, z_p, -->
+<!--            -z_p.alfa, -->
+<!--            valor_p_Sex),booktabs =T)%>% -->
+<!--   kable_styling(latex_options =c("striped")) -->
+<!-- ``` -->
+
+
+<!-- <br>   -->
+
+
+
+<!-- Tal y como se ha planteado H0 y H1, siendo H1 p < 0.5, rechazaremos H0 si el valor del estadístico z_p es menor que el valor crítico (en signo negativo), siendo este el caso -6.70 < -1.64.   -->
+
+
+<!-- Según el estadístico de contraste utilizado y el valor crítico calculado, al ser el primero (**-6.70**) menor que el segundo (**-1.64**), al 0.05 de nivel de significancia, podemos rechazar la hipótesis nula de que la proporción de supervivencia en hombres es mayor o igual a 50% respecto al de las mujeres.   -->
+
+<!-- De igual forma, al ser valor p casi nulo y por tanto menor que nuestro nivel de significación (0.05), el valor p es significativo y podemos rechazar, confirmando el contraste anterior, la hipótesis nula.   -->
+
+
+<!-- Siguiendo la misma metodología, responderemos a las siguientes preguntas: -->
+
+
+<!--  <br>  -->
+
+<!-- **¿La proporción de supervivencia en menores es inferior a la de los mayores?**   -->
+
+<!-- <br> -->
+
+<!-- **Hipótesis nula - H0**: La proporción de menores que sobreviven es igual o mayor a 50% -> H0: p >= p0, siendo po = 0.5   -->
+<!-- **Hipótesis alternativa - H1**: La proporción de menores es menor a 50% -> H1: p < p0, siendo po = 0.5   -->
+
+
+<!-- ```{r echo=TRUE, message=FALSE, warning=FALSE} -->
+<!-- # Determinación del estadístico de contraste -->
+
+<!-- train.survived_Y <- train.survived[train.survived$Age<18,] -->
+<!-- train.survived_O <- train.survived[train.survived$Age>=18,] -->
+
+<!-- n_Age <- length(train.survived$Age) -->
+<!-- n_Age_Y <- length(train.survived_Y$Age) -->
+<!-- n_Age_O <- length(train.survived_O$Age) -->
+
+<!-- # Proporción muestral de menores -->
+<!-- p_hat <- n_Age_Y/n_Age -->
+
+<!-- # Proporción hipotesis nula -->
+<!-- p_0 <- 0.5 -->
+
+<!-- # Estadístico empleado z_p -->
+<!-- z_p = (p_hat - p_0)/sqrt(p_0 * (1 - p_0)/n_Age)  -->
+
+<!-- # Cálculo de valores críticos para el valor de significación asignado -->
+<!-- z_p.alfa = qnorm(1-alfa)  -->
+
+<!-- # Cálculo del valor P en nuestro contraste de hipótesis -->
+<!-- valor_p_Age = pnorm(z_p)  -->
+
+
+
+
+<!-- kbl(data.frame(n_Age, -->
+<!--            n_Age_Y, -->
+<!--            n_Age_O, -->
+<!--            p_hat, -->
+<!--            p_0, -->
+<!--            z_p, -->
+<!--            -z_p.alfa, -->
+<!--            valor_p_Age),booktabs =T)%>% -->
+<!--   kable_styling(latex_options =c("striped")) -->
+<!-- ``` -->
+
+
+<!-- <br>   -->
+
+
+
+<!-- Según el estadístico de contraste utilizado y el valor crítico calculado, al ser el primero (**-10.92**) menor que el segundo (**-1.64**), al 0.05 de nivel de significancia, podemos rechazar la hipótesis nula de que la proporción de supervivencia en hombres es mayor o igual a 50% respecto al de las mujeres.   -->
+
+<!-- De igual forma, al ser valor p casi nulo y por tanto menor que nuestro nivel de significación (0.05), el valor p es significativo y podemos rechazar, confirmando el contraste anterior, la hipótesis nula.   -->
+
+<!-- <br>  -->
+
+
+<!-- **¿La proporción de supervivencia en viajeros con billete único es inferior a la de los viajeros con billete en conjunto?** -->
+
+<!-- <br> -->
+
+<!-- **Hipótesis nula - H0**: La proporción de viajeros con billete único que sobreviven es igual o mayor a 50% -> H0: p >= p0, siendo po = 0.5   -->
+<!-- **Hipótesis alternativa - H1**: La proporción de viajeros con billete único es menor a 50% -> H1: p < p0, siendo po = 0.5   -->
+
+
+<!-- ```{r echo=TRUE, message=FALSE, warning=FALSE} -->
+<!-- # Determinación del estadístico de contraste -->
+
+<!-- train.survived_S <- train.survived[train.survived$Count.ticket==1,] -->
+<!-- train.survived_My <- train.survived[train.survived$Count.ticket>1,] -->
+
+<!-- n_Count.ticket <- length(train.survived$Count.ticket) -->
+<!-- n_Count.ticket_S <- length(train.survived_S$Count.ticket) -->
+<!-- n_Count.ticket_My <- length(train.survived_My$Count.ticket) -->
+
+<!-- # Proporción muestral de menores -->
+<!-- p_hat <- n_Count.ticket_S/n_Count.ticket -->
+
+<!-- # Proporción hipotesis nula -->
+<!-- p_0 <- 0.5 -->
+
+<!-- # Estadístico empleado z_p -->
+<!-- z_p = (p_hat - p_0)/sqrt(p_0 * (1 - p_0)/n_Count.ticket)  -->
+
+<!-- # Cálculo de valores críticos para el valor de significación asignado -->
+<!-- z_p.alfa = qnorm(1-alfa)  -->
+
+<!-- # Cálculo del valor P en nuestro contraste de hipótesis -->
+<!-- valor_p_Count.ticket = pnorm(z_p)  -->
+
+<!-- kbl(data.frame(n_Count.ticket, -->
+<!--            n_Count.ticket_S, -->
+<!--            n_Count.ticket_My, -->
+<!--            p_hat, -->
+<!--            p_0, -->
+<!--            z_p, -->
+<!--            -z_p.alfa, -->
+<!--            valor_p_Count.ticket),booktabs =T)%>% -->
+<!--   kable_styling(latex_options =c("striped","scale_down")) -->
+<!-- ``` -->
+
+
+<!-- <br>  -->
+
+
+<!-- Según el estadístico de contraste utilizado y el valor crítico calculado, al ser el primero (**-4.43**) menor que el segundo (**-1.64**), al 0.05 de nivel de significancia, podemos rechazar la hipótesis nula de que la proporción de supervivencia en hombres es mayor o igual a 50% respecto al de las mujeres.   -->
+
+<!-- De igual forma, al ser valor p casi nulo y por tanto menor que nuestro nivel de significación (0.05), el valor p es significativo y podemos rechazar, confirmando el contraste anterior, la hipótesis nula.    -->
 
   
 <br>
@@ -1784,37 +1943,6 @@ Con estos datos podemos concluir **que podemos rechazar H0 a favor de H1 con un 
 
 
 
-**CARLOS: QUIERES INCLUIR EL T TEST CON EL RESTO DE CONTRASTES JUNTO CON EL OTRO CONTRASTE DE EDAD O LO BORRAMOS?**
-
-
-<br>
-
-**Contraste de hipótesis sobre la edad de supervivencia**
-  
-Planteamos la pregunta de investigación: Queremos saber si las personas que sobrevivieron eran más jóvenes que las personas que murieron en el accidente o, por el contrario, la edad para las personas que muerieron y sobrevivieron es similar.   
-  
-Nos encontramos ante el caso en el que podemos asumir la normalidad de las distribuciones de la media de las dos muestras pero sabemos que las varianzas de las muestras son iguales Se trata de un test paramétrico de dos muestras. 
-
-  
-H0: La media de edad de las personas supervivientes es la misma que de las personas que muerieron  
-H1: La media de edad de las personas que murieron es mayor que la de las personas supervivientes.    
-  
-Usamos un test paramétrico definido por `t.test`
-  
-
-Con un valor p-value por debajo de 0.05 podemos aceptar la hipótesis H1. Con un nivel de confianza del 95% afirmamos que las personas que murieron en el Titanic tienen una media de edad más alta que las personas que sobrevivieron.  
-
-  
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-t.test(train.not.survived$Age, train.survived$Age, alternative="greater", var.equal=TRUE)
-```
-  
- 
-  
-
-
-
 <br>
 
   
@@ -1845,7 +1973,9 @@ summary(model0)
 
 **CARLOS: NO ENTIENDO QUE QUIERE DECIR "PROTEGIDOS".. :(**
 
-Calculamos los Odds Ratio. Los odds ratio indican que ser hombre es factor de protección para la clase 1 (sobrevivir). Los hombres están "protegidos" de la supervivencia en comparación con las mujeres.  
+**OLGA** el OR menor que 1 es factor de protección. Quiere decir que ser hombre reduce la probabilidad de sobrevivir en comparación con ser mujer. Cambio la formulación.. pero así se llama, factor de protección
+
+Calculamos los Odds Ratio. Los odds ratio indican que ser hombre es factor de protección para la clase 1 (sobrevivir). En un evento como el hundimiento del titanic, ser hombre reduce la probabilidad de sobrevivir con respecto a ser mujer.  
 
 <br>
   
@@ -1929,6 +2059,7 @@ exp(coefficients(model1))
 
 
 **CARLOS: TIENE QUE DAR IGUAL PRECISION?**
+**Olga: puede que sí, puede que no, si la variable que he incorporado no ayuda a predecir más**
 
 Realizamos la predicción sobre el conjunto de validación que obtuvimos y con el resultado creamos una matriz de confusión y calculamos la precisión. El resultado es igual que en la regresión anterior.  
 
@@ -2726,7 +2857,7 @@ https://github.com/Carlos-Acosta/Limpieza-y-analisis-de-datos<p>
 
 **CARLOS: ELIGE EL FORMATO DE TABLA QUE QUIERAS. PONGO LAS INICIALES DE LOS NOMBRES SEGUN ENUNCIADO PRACTICA**
 
-```{r}
+```{r, echo=FALSE}
 cont <- data.frame(rbind(c("Investigación Previa", "Olga Garcés / Carlos Acosta"),
                          c("Redacción de las respuestas", "Olga Garcés / Carlos Acosta"),
                          c("Desarrollo código", "Olga Garcés / Carlos Acosta")))
