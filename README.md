@@ -65,7 +65,7 @@ El archivo **requierements.txt** muestra las librerías específicas que son req
 ## Instrucciones
 
 Para poder ejecutar directamente este proyecto en tu máquina local, deberás clonar todo el repositorio mediante su dirección url.<p>
-Una vez clonado, deberás abrir el archivo **GarcesOlga_AcostaCarlos_PRA2.Rmd** en RStudio y ejecutarlo.
+Una vez clonado, deberás copiar la carpeta dataset_titanic (ubicada en la carpeta Archivos CSV Originales) en la carpeta Código y abrir el archivo **GarcesOlga_AcostaCarlos_PRA2.Rmd** en RStudio y ejecutarlo.
 
 
 ## License
