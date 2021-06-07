@@ -126,7 +126,6 @@ El dataset original está compuesto por dos ficheros: el fichero pensado para re
   
 El fichero de entrenamiento tiene **891** registros mientras que el fichero de test contiene **418** instancias.  
   
-` `  
 
 Las variables de las que se compone el dataset son y sus unidades o magnitudes de las características son: 
   
@@ -134,67 +133,56 @@ Las variables de las que se compone el dataset son y sus unidades o magnitudes d
 Identificador del pasajero  
 Tipo: Entero indicando un identificador único de casa instancia.  
   
-` `  
 
 **Survived**:  
 Indica si el pasajero ha sobrevivido la catástrofe  
 Tipo: Entero (categórica) 0 = No ha sobrevivido; 1 = Ha sobrevivido  
   
-` `  
 
 **Pclass**:  
 Clase en la que viajaba el pasajero  
 Tipo: String (categórica) 1 = Primera clase; 2 = Segunda clase; 3 = Tercera Clase  
   
-` `  
 
 **Name**:  
 Nombre del pasajero  
 Tipo: String  
   
-` `  
 
 **Sex**:  
 Sexo del pasajero  
 Tipo: String (categórica) female = Mujer; male = hombre  
   
-` `  
 
 **Age**:  
 Edad del pasajero  
 Tipo: Entero  
   
-` `  
 
 **SibSp**:  
 Indica si el pasajero tenía hermanos o pareja a bordo  
 Tipo: Entero  
   
-` `  
 
 **Parch**:  
 Indica si el pasajero tenía padres o hijos a bordo  
 Tipo: Entero  
   
-` `  
         
 **Ticket**:  
 Número del billete  
 Tipo: String alfanumérico  
   
-` `  
  
 **Fare**:  
 Precio del billete sin especificar si es un billete individual o grupal  
 Tipo: Número Real  
 
-` `  
 
 **Cabin**:  
 Número de camarote  
 Tipo: String  
   
-` `  
         
 **Embarked**:  
 Indica si el pasajero ha embarcado o no y donde  
@@ -304,9 +292,9 @@ En nuestro caso, tenemos dos archivos **train.csv** y **test.csv**, dónde la di
 
 ` `  
 Con la finalidad de observar las distribuciones de las variables que serán base del estudio en la predicción de **“Survived”** integraremos verticalmente los dos archivos y así obtendremos un mayor número de datos **para ver sus medidas de tendencia central y dispersión.**  
-` ` 
+
 Para que la integración vertical sea satisfactoria, las variables y estructura de ambos archivos debe coincidir, por tanto, crearemos un dataframe **train_sin_etiqueta** que se integrará con las instancias de test.csv al cual llamaremos **df_total_sin_etiqueta**.  
-` `
+
 Observamos que la integración es satisfactoria puesto que las instancias ahora son **1309 (891 + 418)**. Generaremos a su vez un nuevo archivo csv auxiliar que mostrará este dataframe **"Titanic_global_sin_etiqueta.csv"**
 
 ` `
@@ -353,7 +341,6 @@ Antes de seleccionar los datos, haremos una pequeña comprobación sobre posible
 
 Comprobamos si hay líneas duplicadas en el dataframe usando `duplicated`. No existen registros duplicados, pero sí detectamos dos pares de personas con el mismo nombre. **Para asegurarnos que se trata de personas diferentes**, buscamos los registros que tengan los nombres Connolly, Miss. Kate o Kelly, Mr. James.   
 
-` `
 
 Podría tratarse de la misma persona que ha comprado dos billetes, pero en estos registros vemos que las personas tienen edades diferentes y **no hay motivo para pensar que se trata de duplicados**.  
   
@@ -381,12 +368,11 @@ df_total_sin_etiqueta[df_total_sin_etiqueta$Name=="Kelly, Mr. James" |
 ` `  
   
 La selección se puede entender como un primer filtro de los datos, no solamente a través de poner límites a los valores de algunas instancias o elegir algún valor cualitativo específico, sino también a través de la inspección de las correlaciones entre los atributos y la posterior eliminación del dataset de aquellos que sean redundantes.
-` ` 
+
 **Debido a que el problema planteado es interpretar qué factores influyen en la supervivencia, a priori, no sabríamos si debemos descartar alguna variable o no (eliminación de la variable del estudio) o si deberíamos filtrar los datos, ya sean numérica o categóricamente.**
-` `  
+
 No obstante, en esta sección eliminaremos la variable **“Name”** porque no es de mucha utilidad para nuestros análisis ya que el nombre no debería influir a priori en la supervivencia de los viajeros y también la variable **“PassengerId”**puesto que simplemente es un identificador.
   
-` `
 
 Por lo tanto, además de esta primera selección relizada, **esta fase del proceso la dejaremos abierta en este punto y retomaremos una vez la exploración y análisis nos vaya indicando qué debemos seleccionar y/o filtrar**. A continuación, se hace una lista de las selecciones realizadas en este apartado y a posteriori.
 ` `  
@@ -426,7 +412,7 @@ Se ha detectado que **hay números de billetes duplicados**. Esto indica que hay
 
 
 Se observa que la variable **“Fare”** muestra el mismo precio para los tickets grupales, por tanto, para saber realmente el precio del ticket por viajero y también para poder usar correctamente la variable “Fare”, **deberíamos saber de cuántas personas es el ticket grupal y después dividir la variable “Fare” for dicha cantidad**.
-` ` 
+
 Crearemos una columna con el recuento de billetes (**Count.ticket**) con el mismo id para cada pasajero y otra con el precio unitario (**Unit.price**).
 
 ` `  
@@ -527,9 +513,9 @@ df_total_sin_etiqueta <- df_total_sin_etiqueta[keep.cols]
 **Variable Age**:
   
 El número de registros de Age que son NA representan aproximadamente el **20% de los registros totales**. 
-` `      
+    
 Este dataset contiene variables categóricas y numéricas y para imputar los valores nulos de la variable Age podemos usar **el método `kNN`**. Aplicamos la función e imputamos los valores NA usando todos los demás campos del dataset y con un valor de k igual a 3. El algoritmo busca los registros de los 3 pasajeros más parecidos (cercanos según la distancia Gower) al que contiene un valor nulo y usa los datos de edades de estos pasajeros para imputar el valor faltante.
-` `     
+  
 Una vez ejecutado el algoritmo para imputar los valores, volvemos a comprobar si existen valores NA y **podemos confirmar que todos los NA para la variable edad han sido imputados**.
 
   
@@ -619,13 +605,13 @@ df_total_sin_etiqueta <- df_total_sin_etiqueta[keep.cols]
 ` `  
 
 Ahora comprobamos las variables que toman valores igual a cero sin que tenga sentido que tomen este tipo de valor.   
-` `     
+  
 La variable que representa las "etiquetas" (variable **Survived**) toma valores iguales a cero y consideramos que es correcto puesto que es parte de la variable dicotómica del dataset. Lo mismo ocurre con las variables **SibSp**, **Parch**, donde consideramos normal que existan valores iguales a cero, **significa que los pasajeros no tenían familia a bordo o viajaban solos**.  
-` `      
+   
 En cambio, los valores iguales a cero para la variable **Unit.price** son algo más extraños. Entre los pasajeros que tienen un Unit.price igual a cero hay personas que viajaban en primera, segunda y tercera clase.  
-` `      
+   
 **La idea que un ticket sea gratuito, en principio, no sería posible**, por tanto, volveremos a aplicar el método kNN para imputar estos valores.  
-` `      
+   
 Primero cambiaremos el valor de cero a NA y después actuaremos como en el apartado anterior.
   
 ` `    
@@ -652,7 +638,7 @@ sum(is.na(df_total_sin_etiqueta$Unit.price))
 **Valores extremos** 
   
 Las comprobaciones de valores extremos las hemos hecho anteriormente con `sapply(df, summary)`.  
-` `     
+  
 Visualizamos boxplots para las variables numéricas que tenemos: **Age** y **Unit.price**.  
 
 ` `       
@@ -807,12 +793,9 @@ write.csv(test, "test_processed.csv", row.names = FALSE)
 ## **Screening**  
 ` `      
 Antes de crear las visualizaciones determinamos que las variables numéricas que son potencialmente importantes para el análisis son:  **Age** y **Unit.price** que corresponden a la edad de los pasajeros y el precio unitario del billete.  
-` `      
-
-` `    
   
 Survived, Sex, Embarked son variables categóricas y Pclass, SibSp, Parch son variables categóricas ordinales (existen rangos en los valores de las variables).  
-` `      
+    
 Realizamos las transformaciones oportunas para guardar las variables con sus tipos correspondientes.  
 ` `      
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
@@ -857,7 +840,7 @@ visualiz(train, "Age", "Survived", "Age", facetPlot=TRUE)
 ` `   
 
 Si observamos la variable **Unit.price**(precio unitario del billete), la mayoría de los pasajeros pagaron muy poco por el billete. Aquí en el boxplot encontramos outliers pero, como se ha comentado en el apartado anterior, consideramos solamente eliminar el máximo y no descartar el resto de estas entradas ya que hay pocos pasajeros que pagaron un importe alto por el billete y esta información puede ser muy interesante para predecir la posibilidad de supervivencia: ¿Viajar en una clase privilegiada aumenta la posibilidad de sobrevivir?  
-` `      
+     
 En el boxplot además podemos ver que las personas que sobreviven tienen una media más alta en el precio del billete. 
 ` `      
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
@@ -906,11 +889,11 @@ plot(table(train$Count.ticket, train$Survived),
 ` `    
 
 Las personas que viajaban en tercera clase tienen la menor proporción de supervivencia comparando con las personas que viajaban en primera clase. Las mujeres que viajaban en el titanic sobrevivieron en su mayoría. Los hombres sobrevivieron en mucho menor proporción.   
-` `      
+ 
 La mayoría de personas viajaba sin familiares (hermanos, pareja, padres o hijos) y parece ser que el porcentaje de supervivencia es algo más alto en personas que tenían familiares a bordo.   
-` `      
+    
 La mayoría de personas embarcaron en el punto S, pero el mayor porcentaje de supervivencia lo tienen las personas que embarcaron en C.  
-` `      
+    
 Los pasajeros que viajaban varias personas con el mismo billete también tienen una mayor supervivencia ( hasta 4 pasajeros ). 1 o más de 4 pasajeros con el mismo billete tienen la misma proporción de supervivencia.  
 
 ` `   
@@ -980,7 +963,7 @@ ggplot(data=train, aes(x=Embarked, fill=as.factor(Survived)))+geom_bar(position 
 ` `      
 
 Visualizamos la supervivencia usando las variables de la clase en la que viaja el pasajero y el número de personas que viajan con el mismo billete.  
-` `    
+  
 En el Titanic viajaron familias enteras de hasta 7 personas en primera clase e incluso de 11 personas en tercera clase. La supervivencia de personas que viajaban sobre el mismo billete en tercera clase es comparable con el mismo dato en segunda clase.  
 ` `      
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
@@ -1067,7 +1050,7 @@ train.older <- train[train$Age>=18,]
 
 **Subconjunto Billete Único Vs. Billete Grupal**
 
-Este subconjunto nos ayudará a poder tener diferenciados los datos por la variable Count.ticket (únicos o grupales) y poder realizar contrastes de hipótesis (incluyendo un Xi cuadrado), regresiones logísticas, árboles de decisión y un modelo Random Forest.` `  
+Este subconjunto nos ayudará a poder tener diferenciados los datos por la variable Count.ticket (únicos o grupales) y poder realizar contrastes de hipótesis (incluyendo un Xi cuadrado), regresiones logísticas, árboles de decisión y un modelo Random Forest.   
 
 ` `  
 
@@ -1105,7 +1088,7 @@ train.many <- train[train$Count.ticket>1,]
 ` `    
 
 Los datos de test que tenemos no disponen de etiqueta de clase. 
-` `    
+ 
 Partimos el conjunto train en subconjuntos de train y validación. De esta manera dispondremos de datos para comprobar el funcionamiento de los modelos que construyamos.  
 
 ` `      
@@ -1190,9 +1173,9 @@ Función para visualizar los datos por pares.
 **Variable age**
 ` `     
 Visualizamos los datos de la edad para personas que sobrevivieron en el hundimiento frente a personas que no sobrevivieron.  
-` `     
+ 
 La media (en rojo) y la mediana (en azul) de los pasajeros que sobrevivieron están muy cerca. Las personas que no sobrevivieron tienen una edad mediana más baja que la edad media. Los valores de estos dos indicadores de tendencia central son más altos para personas que no sobrevivieron: **las personas que murieron tenían una media de edad algo más alta que los que sobrevivieron**.  
-` `      
+   
 Según el qqplot las dos distribuciones son cercanas a la normal.` `  
 ` `    
 **Según el teorema del límite central podemos asumir la distribución normal de la media de estas dos muestras ya que sus tamaños son mayores que 30 observaciones.** 
@@ -1205,9 +1188,9 @@ visualiz1(train.survived$Age, train.not.survived$Age,
 ` `  
 
 Comprobaremos de la igualdad de las varianzas entre los conjuntos de datos de pasajeros que sobrevivieron y no. Para ello usamos la función `var.test`.  
-` `      
+   
 El contraste de varianzas se realiza mediante un contraste de hipótesis, donde aceptar H0 significaría que las varianzas son iguales. 
-` `      
+   
 El valor **p-value** que obtenemos es de **0.15**. Este valor indica que rechazando la hipótesis nula de igualdad de varianzas probablemente estaríamos comentiendo un error, por tanto:
 ` `    
 
@@ -1224,9 +1207,9 @@ var.test(train.survived$Age, train.not.survived$Age)
 **Variable Unit price: precio del billete unitario** 
 ` `     
 Visualizamos el precio del billete unitario para los pasajeros que sobrevivieron frente a los que no. Podemos ver que la media (en rojo) y la mediana (en azul) del precio de billete para los pasajeros que sobrevivieron están bastante separadas. El precio que corresponde a la mediana es alrededor de **13** y la media es más cercana a **20**. Existe esta diferencia porque la distribución tiene una cola larga a la derecha, tenemos pasajeros que pagaron un precio muy alto por sus billetes.  
-` `      
+ 
 La mayoría de los pasajeros que no sobrevivieron pagaron un precio bajo por el billete, hay pocas personas que pagaron precios más altos y no sobrevivieron. 
-` `     
+  
 Ninguna de las dos distribuciones es normal, aunque para el fin de hacer un contraste de hipótesos sobre la media podemos asumir que la media poblacional se distribuye normalmente (**Teorema del límite central**).  
 ` `      
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
@@ -1237,7 +1220,7 @@ visualiz1(train.survived$Unit.price, train.not.survived$Unit.price,
   
 ` `      
 Realizamos el test de igualdad de las varianzas para el precio del billete para pasajeros que sobrevivieron frente a los que no sobrevivieron. El valor **p-value** nos indica que podemos rechazar H0, es decir, **las varianzas entre estos dos grupos de pasajeros son diferentes**.  
-` `      
+
 En los histogramas podemos ver que los pasajeros que sobrevivieron de media pagaron más por sus billetes. Tanto en el grupo de supervivientes como de no supervivientes la media es mayor que la mediana, dado que tenemos outliers de precio de billete unitario muy alto. ` `     
   
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
@@ -1429,11 +1412,11 @@ H1: p.m < p.f
 ` `  
 Este contraste de hipótesis representa un test de la proporción de la población por la cola izquierda, por tanto, el valor zcrit.R representará, bajo la hipótesis nula, el límite inferior de la supuesta verdadera proporción de la población.  
 Este contraste rechazará la HO si el estadístico calculado es menor o igual al valor crítico (con signo negativo) al nivel de significación estimado.  
-` `  
+
 Aceptar la hipótesis nula implicará aceptar que los hombres sobrevivieron al menos en la misma proporción que las mujeres. En cambio, aceptar la hipótesis alternativa indicaría que los hombres sobrevivieron en menor proporcion que las mujeres.  
-` `  
+
 El tamaño de la muestra es los suficientemente grande para poder asumir que la proporción muestral para la población de hombres sigue una distribución normal con media p.m y desviación estándar `sqrt(p.m(1-p.m) / n.m)`. De forma análoga se determina la media y desviación estándar para la proporción muestral de las mujeres.  
-` `  
+
 Debido al planteamiento de la hipótesis nula y su alternativa y por cómo se han descrito las hipótesis H0 y H1, se observa que la hipótesis alternativa es unilateral, puesto que se plantea como un límite a un solo valor dado.  
 
 ` `  
@@ -1444,7 +1427,7 @@ Debido al planteamiento de la hipótesis nula y su alternativa y por cómo se ha
 alfa <- 0.05
 ```
 
-` ` 
+
 ` `  
 Determinamos el estadístico de contraste, en este caso, la muestra es grande y proviene de una distribución de Bernoulli de parámetro p, con lo cual, según el Teorema del Límite Central podremos utilizar el estadístico de contraste mostrado anteriormente.  
 
@@ -1547,7 +1530,6 @@ kbl(data.frame(zobs,  zcrit.L, pvalue, p.y, p.o, n.y, n.o),booktabs =T)%>%
 ` `    
 Obtenemos que el valor crítico (**-1.64**) es menor que el estadístico observado (**3.75**), por lo tanto se sitúa en el rango de aceptación de H0. Por lo tanto, con un nivel de confianza del 95% debemos aceptar la hipótesis nula que indica que **la proporción de personas menores de 18 años que sobrevivieron en el accidente es al menos igual (o mayor) que la proporción de mayores de 18 años que sobrevivieron**.   
 
-` `  
 De igual forma, al ser valor p un valor muy cercano a 1 y mayor que alfa, si rechazamos la hipótesis nula, posiblemente estaremos comentiendo un error.
 
 
@@ -1618,9 +1600,9 @@ El valor bajo de p-value confima la conclusión que hemos extraido anteriormente
 **Relación entre supervivencia y billete único o grupal**
 ` `      
 Utilizamos el test Chi cuadrado para comprobar si los pasajeros de primera clase sobrevivieron en mayor medida que los pasajeros de segunda clase.  
-` `     
+
 El test se aplica en R con un nivel de confianza por defecto del 95%.  
-` `      
+    
 Crearemos dos tablas de contingencia entre las variables que indican supervencia y la que indica el tipo de billete. Una primera en valores absolutos, y una segunda mostrando las proporciones.
 ` `      
 
@@ -1645,7 +1627,7 @@ length(train$Survived)
 
 
 Dos variables categóricas que forman parte de una tabla de contingencia pueden ser sujetas a un test de independencia. Este test puede ser representado for el ChiSquare Test mediante un contraste de hipótesis.  
-` `      
+  
 El contraste se realizará para observar si las dos variables son independientes o no, por tanto, podemos plantear las hipótesis como se indica a continuación:  
 
 ` `  
@@ -1693,9 +1675,9 @@ val_cri
 
 
 Debido a que el estadístico Chi Square es mayor al valor crítico calculado de la distribución Chi Square (con un grado de libertad y con un nivel de significación de 0.05), podemos rechazar la hipótesis nula de que no hay relación entre Survived y Tipo de Billete, es decir, rechazamos la hipótesis al 95 % de nivel de confianza de que tales variables sean independientes.  
-` `      
+    
 Como el valor de p-value es menor que el nivel de significancia, **podemos rechazar la hipótesis nula de que las variables Survived y Tipo de Billete son independientes**, cuadrando este resultado con los cálculos anteriores.
-` `     
+   
 Por tanto, se puede afirmar al 95% de nivel de confianza que las variables Survived y Tipo de Billete **están relacionadas**.
 
 ` `   
@@ -1761,8 +1743,8 @@ Con estos datos podemos concluir **que podemos rechazar H0 a favor de H1 con un 
 ` `  
 
 Aplicamos una regresión logística para predecir la probabilidad de supervivencia usando como variable predictora la variable **sexo**.  
-` `     
-Según los datos que nos proporciona la función `summary` la variable sexo **es significativa para predecir la supervivencia**. El coeficiente negativo asociado a la variable dummy **Sexmale** indica que ser de sexo masculino reduce la probabilidad de sobrevivir.` `  
+  
+Según los datos que nos proporciona la función `summary` la variable sexo **es significativa para predecir la supervivencia**. El coeficiente negativo asociado a la variable dummy **Sexmale** indica que ser de sexo masculino reduce la probabilidad de sobrevivir.  
 
 ` `  
 
@@ -1779,7 +1761,7 @@ summary(model0)
    
 Calculamos los Odds Ratio. Los odds ratio indican que ser hombre es factor de protección para la clase 1 (sobrevivir). En un evento como el hundimiento del titanic, ser hombre reduce la probabilidad de sobrevivir con respecto a ser mujer.  
 
-` `  
+ 
 
 El Odds Ratio se calcula como (Psobrevivir / (1 - Psobrevivir)) / (Pno sobrevivir / (1 - Pno sobevivir)). Cuando optenemos un valor menor que uno, significa que el denominador es mayor, por lo tanto, la probabilidad de no sobrevivir es mayor.  
 
@@ -1793,11 +1775,11 @@ exp(coefficients(model0))
 ` `  
 
 
-Usamos los datos de validación para realizar una predicción de supervivencia.` `  
-` `    
-Tenemos que 76 instancias de supervivencia y 164 instancias de no supervivencia han sido predichas correctamente.` `  
-36 instancias de supervivencia real han sido predichas como no supervivencia` `  
-21 instancias de no supervivencia fueron predichas incorrectamente como supervivencia.` `  
+Usamos los datos de validación para realizar una predicción de supervivencia.  
+  
+Tenemos que 76 instancias de supervivencia y 164 instancias de no supervivencia han sido predichas correctamente.    
+36 instancias de supervivencia real han sido predichas como no supervivencia  
+21 instancias de no supervivencia fueron predichas incorrectamente como supervivencia.  
 
 ` `  
   
@@ -1829,11 +1811,11 @@ sum(diag(conf.1))/sum(colSums(conf.1))
 
 
 Aplicamos una regresión logística para comprobar si las variables **Sexo** y **Clase** son significativas para la supervivencia en el accidente.  
-` `     
+
 Ambas variables son significativas y así lo indican los asteriscos junto a los valores Pr(>|z|).  
-` `      
-**Ser hombre, viajar en clase 2 o clase 3 reduce la posibilidad de supervivencia con respecto a ser mujer y viajar en primera clase.**. Esto viene indicado por el signo negativo que acompaña el valor del coeficiente para Sexmale, Pclass2 y Pclass3.` `    
-` `    
+  
+**Ser hombre, viajar en clase 2 o clase 3 reduce la posibilidad de supervivencia con respecto a ser mujer y viajar en primera clase.**. Esto viene indicado por el signo negativo que acompaña el valor del coeficiente para Sexmale, Pclass2 y Pclass3.
+
 El coeficiente para la variable Sexmale tiene el mayor valor absoluto del coeficiente y significa que un aumento de una unidad del número de hombres reduce en 2.5 unidades la posibilidad de supervivencia general. 
 ` `    
   
@@ -1850,7 +1832,7 @@ summary(model1)
 ` `  
 
 Calculamos los odds ratio. Igual que en el caso anterior vemos que **la probabilidad ser hombre y sobrevivir es mucho menor que la de ser mujer y sobrevivir**.` `  
-` `    
+
 Por clases el OR indica que **estar en segunda o tercera clase es factor de protección** respecto a la primera clase. Para los pasajeros de segunda o tercera clase la probabilidad de sobrevivir disminuye con respecto a los pasajeros de primera clase.    
 
 ` `  
@@ -1904,12 +1886,12 @@ summary(model2)
 ` `    
 
 Las variables **significativas son: clase, sexo, edad**. Algunos de los valores del recuento de billetes, como **6 billetes, 5 billetes también son significativas** para esta regresión y sus coeficientes indican que este tipo de billetes influyeron negativamente en la probabilidad de supervivencia.   
-` `    
+
 Por otra parte, en los casos de personas que viajaban con un billete grupal de 8 personas, el coeficiente es positivo y la variable es significativa, entre estos grupos la porobabilidad de supervivencia aumentaba.  
-` `    
+
 Como ya hemos visto en regresiones anteriores, la clase en la que viajaban los pasajeros es relevante para la regresión, viajar en segunda o tercera clases reduce la probabilidad de sobrevivir con respecto a viajar en primera. Lo mismo ocurre para pasajeros de sexo masculino, en el accidente ser hombre redujo la probabilidad de supervivencia. La edad de los pasajeros es otro factor que ha influido.   
 
-` `    
+
 
 Más adelante crearemos un árbol de decisión y podremos visualizar los resultados obtenidos desde otra perspectiva.  
 
@@ -1920,7 +1902,7 @@ Más adelante crearemos un árbol de decisión y podremos visualizar los resulta
 ` `    
 
 El resultado del modelo indica que **cuando  de dos a cuatro personas viajaban juntas, la probabilidad de sobrevivir aumentaba** (signo positivo del coeficiente).   
-` `      
+   
 Calculamos los ORS. Para las personas que viajaban con otra persona, otras dos o tres personas el "riesgo" de sobrevivir es mucho mayor.   
 
 ` `  
@@ -1937,7 +1919,7 @@ Las personas que tenían estas características (una o varias) muy probablemente
 ` `    
 **Factor de riesgo**:  
 -Viaje entre 2, 3, 4, 8 personas  
-` `    
+  
 Las personas con estas características (una o ambas) tenían más probabilidad de sobrevivir
 
 
@@ -1953,7 +1935,7 @@ exp(coefficients(model2))
 ` `    
 
 Usamos el conjunto de validación para comprobar la precisión del modelo.  
-` `    
+ 
 Con respecto al modelo anterior, la precisión ha mejorado un poco, ahora tenemos 81.1% frente al 80.8% anterior.  
 ` `    
 ```{r, warning=FALSE}
@@ -1980,8 +1962,7 @@ sum(diag(conf.3)) / sum(colSums(conf.3))
 ` `   
 
 En primer lugar creamos un árbol de decisión para predecir la supervivencia de los pasajeros del Titanic tomando en cuenta las variables explicativas del conjunto de entrenamiento y la etiqueta de clase (Supervivencia o no).` `     
-  
-` `    
+
 Usamos los datos del conjunto train para entrenar el modelo y visualizamos el árbol y los datos del modelo.  
  
 ` `    
@@ -1994,11 +1975,11 @@ print(treeFit)
 ` `    
 
 El árbol ha realizado la primera particiones de los datos en base a la variable Sex. Los pasajeros de sexo masculino, mayores de 13 años tienen como clase por defecto la no supervivencia. De ellos sobreviven los que pagaron entre 26 y 32 dólares por el billete y son menores de 37 años. El precio de entre 26 y 32 es bastante alto, se trata de pasajeros de primera o segunda clase.  
-` `    
+
 La mayoría de menores de 13 años sobreviven, algo más si viajaban con 1 hermano o menos.  
- ` `     
+
 Por otra parte, los pasajeros de sexo Femenino en que viajaban en tercera clase sobrevivieron si viajaban con menos de 5 personas (count ticket), si pagaron menos de 8 dólares y si tenían edad menor de 28 años. Todos los demás se clasifican como no supervivientes. Las mujeres en otras clases distintas de la tercera sobrevivieron en su mayoría.     
-` `      
+
 En el árbol podemos ver que se ha considerado variables bastante diferentes para clasificar a los hombres y a las mujeres. Para los hombres la edad ha sido un factor importante para la supervivencia, principalmente sobrevivieron los hombres menores de 14 años. En el caso de las mujeres el factor determinante ha sido la clase y las personas con las que viajaban.  
   
 ` `     
@@ -2053,21 +2034,22 @@ score.tree
 
 ` `    
 Podemos entrenar un árbol de decisión usando cross validation y la búsqueda en rejilla.  
-` `     
+  
 La validación cruzada consiste en dividir los datos en partes (parámetro number) y ejecutar el modelo varias veces usando como test set una de las particiones de los datos. El mejor modelo es aquel que tiene la mejor métrica y en nuestro caso la métrica a considerar es "Accuracy".  
-` `     
+  
 En el parámetro control que se le puede pasar a rpart podemos especificar una serie de condiciones, en nuestro caso especificamos **xval igual a 10** (número de iteraciones de la validación cruzada), **minbucket igual a 5** (número mínimo de observaciones en un nodo final), **maxdepth igual a 10** (profundidad máxima del árbol).
-` `     
+  
 Imprimimos los datos del árbol y lo visualizamos.  
-` `    
+   
 En este caso el sexo del pasajero sigue siendo la primera variable que se usa para realizar la partición.  
-` `    
+   
 Los **hombres menores de 13 años sobreviven** si viajan con 1 hermano o ninguno. Para las mujeres sigue siendo determinante la clase: **las mujeres de clases diferentes a tercera clase sobreviven**. Las mujeres de tercera clase sobreviven si viajan con menos de 4 otras personas y si tienen una edad entre 17 y 28 años. Las mujeres de 17 años o menos sobreviven.  
   
   
 ` `  
   
 ```{r}
+
 cvrpart  <- rpart(as.factor(trainy) ~  Age + Sex + Pclass + Embarked + Count.ticket + Parch + SibSp,
                data =data.frame(cbind(trainX,trainy)),
                method ='class',
@@ -2079,7 +2061,7 @@ rpart.plot(cvrpart)
 ` `   
 
 Podamos el árbol con el parámetro de complejidad **cp=0.02** y visualizamos el plot.    
-` `    
+   
 Para los hombres el árbol se comporta igual que el primer árbol que hemos creado. Para las mujeres simplifica las particiones. Las mujeres de tercera que no sobreviven son las que viajan con 4 o más otras personas. El resto sobrevive.  
 
 ` `  
@@ -2173,15 +2155,17 @@ plot(varImp(model.rf))
 Una vez obtenido el juego de datos en su totalidad (train + test), y sabiendo que el propio juego de datos es una muestra solamente del juego de datos completo, es lógico realizar/calcular estadísticos en base a este juego de datos combinado train/test **para obtener un mayor conocimiento de las distribuciones y comportamientos de sus variables**.
 
 ` `    
-## **Tabla resumen de las variables cualitativas (datos completos: train + test)**
+  
+## **Tabla resumen de las variables cualitativas (datos completos: train + test)**   
+  
 
 ` `      
 Realizaremos una tabla resumen con las frecuencias relativas y las frecuencias absolutas de las variables cualitativas.
 Creamos un dataframe auxiliar para generar nuestra tabla.
-` `    
+  
   
 Calculamos, para todos los campos, la frecuencia relativa y absoluta a través del contaje dividido por el número total de filas del dataframe.
-` `     
+   
 Creamos una tabla mediante la función kable().
 
 ` `      
@@ -2274,16 +2258,16 @@ kable(df_var_cualitativa_table, digits = c(0,0,3),
 Realizaremos una tabla resumen con los **estadísticos principales de tendencia central y dispersión**, con **medidas robustas y no robustas**.
 Para ello, utilizaremos tres funciones que nos aportarán diferentes estadísticos a utilizar:
 
-` `    
+ 
 * describe()` `  
 * winsor.mean() (aplicaremos unos límites del 5 %)` `  
 * stat.desc()` `  
 
-` `  
+
 
 Estas tres funciones nos darán diversos estadísticos que uniremos y ordenaremos en una única tabla para mostrar un completo resumen estadístico de las variables cuantitativas.
 
-` `    
+ 
 Finalmente, creamos una tabla mediante la función kable().
 ` `    
 
@@ -2438,7 +2422,6 @@ kable(df_var_cuantitativa_tabla,digits = c(2, 2, 2, 3),
 ` `    
 
 
-` `  
 
 Variable | Variable Dependiente | P-Value | Resultado
 -------- | --------------| ----- | -----------------------------------
@@ -2448,7 +2431,6 @@ SibSp|Survived|2.2e-16|Las varianzas en SibSp de los pasajeros en función de la
 Parch|Survived|0.1908|Las varianzas en Parch de los pasajeros en función de la supervivencian son iguales
 Count.ticket|Survived|3.459e-09|Las varianzas en la edad de los pasajeros en función de la supervivencia son diferentes	
 
-` `  
 
 
 ` `    
@@ -2522,9 +2504,9 @@ Count.ticket 8|0.010108| Aumento de probabilidad de sobrevivir
 
 ` `    
 Los tres modelos que hemos aplicado han encontrado que la variable más relevante es el sexo.   
-` `    
+ 
 La clase es una variable relevante para personas de sexo femenino.  
-` `    
+   
 La edad es una variable relevante para personas del sexo masculino y algo menos para las de sexo femenino.  
 
 ` `    
@@ -2580,24 +2562,24 @@ score.forest
   
 Al inicio de las práctica nos planteamos descubrir los posibles factores que pudieron influir en la supervivencia o no supervivencia de los pasajeros del Titanic.` `  
 
-` `  
+
 
 Para poder responder a esta pregunta, hemos realizado una serie de pasos:
 
-` `    
+ 
 
-* Carga de los datos` `  
-* Integración de los datos` `  
-* Creación de nuevas variables y eliminación de variables innecesarias` `  
-* Imputación de valores nulos y tratamiento de outliers.` `  
+* Carga de los datos  
+* Integración de los datos  
+* Creación de nuevas variables y eliminación de variables innecesarias  
+* Imputación de valores nulos y tratamiento de outliers.  
 
 
-` `  
 
 Hemos usamos los datos procesados para realizar una exploración visual de los datos, aplicar técnicas de estadística inferencial y modelos de aprendizaje automático.  
 ` `    
-Las variables con las que trabajamos en nuestro dataset procesado, además de la variable dependiente *Survived** han sido:` `  
-` `    
+Las variables con las que trabajamos en nuestro dataset procesado, además de la variable dependiente *Survived** han sido: 
+
+  
 * Pclass   
 * Sex   
 * Age   
@@ -2617,29 +2599,23 @@ siendo las últimas 3 variables calculadas.
 
 **Conclusiones extraídas del análisis visual:** 
 
-` `  
 
 - Las personas que sobrevivieron eran algo más jóvenes (mediana), y pagaron más por sus billetes.  
 
-` `  
 
-- La proporción de personas de primera clase que sobrevivió al accidente es mayor que la proporción de supervivientes en tercera y incluso en segunda clase.` `  
+- La proporción de personas de primera clase que sobrevivió al accidente es mayor que la proporción de supervivientes en tercera y incluso en segunda clase.  
 
-` `  
 
-- De los supervivientes en el accidente la mayoría de personas eran mujeres.` `  
+- De los supervivientes en el accidente la mayoría de personas eran mujeres.  
 
-` `  
 
-- En tercera clase la mitad de las mujeres no sobrevivieron.` `  
+- En tercera clase la mitad de las mujeres no sobrevivieron.  
 
-` `  
 
-- La proporción de mujeres supervivientes en primera y segunda clases es muy alta.` `  
+- La proporción de mujeres supervivientes en primera y segunda clases es muy alta.  
 
-` `  
 
-- En cuanto a la supervivencia de los hombres, los hombres de primera clase sobrevivieron en mayor proporción que los hombres de otras clases, sin embargo, la proporción de hombres supervivientes de tercera clase es menor que la de mujeres supervivientes de tercera clase.` `  
+- En cuanto a la supervivencia de los hombres, los hombres de primera clase sobrevivieron en mayor proporción que los hombres de otras clases, sin embargo, la proporción de hombres supervivientes de tercera clase es menor que la de mujeres supervivientes de tercera clase.  
 
 
 ` `    
@@ -2653,7 +2629,7 @@ ggplot(data=train, aes(x=Sex, fill=Survived))+
 ` `    
 Otro factor que nos ha parecido interesante es la compañía de los pasajeros en el crucero. La mayoría de los pasajeros viajaron solos, sin embargo, **había muchos billetes que tenían el mismo número para pasajeros distintos**.` `  
 
-` `    
+  
 Este número está relacionado con las variables Parch y SibSp, pero no indica el parentesco. Según las visualizaciones que realizamos, **las personas que viajaban con acompañantes sobrevivieron en mayor proporción que las personas que viajaban solas**.  
 
 ` `    
@@ -2670,8 +2646,6 @@ plot(table(train$Count.ticket, train$Survived),
 ` `    
 En el análisis inferencial hemos realizado varios contrastes de hipótesis para confirmar o desmentir las conclusiones que obtuvimos durante el análisis visual de los datos.
 
-` `  
-
 Con el contraste sobre el sexo y el nivel de supervivencia hemos podido afirmar con un nivel de confianza del 95% que **la proporción de hombres que sobrevivieron al accidente era menor que la proporción de mujeres que sobrevivieron**. Asimismo **la proporción de menores de edad supervivientes es mayor que la de mayores de edad supervivientes**. 
 
 ` `    
@@ -2681,11 +2655,7 @@ Con el contraste sobre el sexo y el nivel de supervivencia hemos podido afirmar 
 ` `    
 En las regresiones que hemos aplicado las principales conclusiones extraidas han sido que las variables **Sex**, **Pclass**, **Age** son significativa para predecir la supervivencia de los pasajeros del Titanic.` `  
 
-` `  
-
 A partir de los coeficientes negativos en Pclass 2, Pclass3 y Sexmale deducimos que **las personas en segunda y tercera clase y los hombres tenían menos posibilidades de sobrevivir que las mujeres**.
-
-` `  
 
 La variable dummy **Count.ticket 6** también es significativa para el modelo final y su coeficiente indica que **para grupos de 6 viajeros las posibilidades de sobrevivir se reducían**.  
 
@@ -2693,11 +2663,11 @@ La variable dummy **Count.ticket 6** también es significativa para el modelo fi
 **Conclusiones árbol de decisión:**  
 ` `    
 Tras aplicar el árbol de decisión obtuvimos una mejor visión de los posibles motivos de supervivencia.` `  
-` `    
+  
 Para los hombres la supervivencia por defecto es 0 (no supervivencia), a no ser que sean menores de 13 años y viajen con un hermano o sin hermanos.` `  
-` `    
+
 En el caso de las mujeres el factor determinante ha sido **la clase en la que viajaban**. La mayoría de mujeres que viajaban en primera y segunda clase sobrevivieron. De las mujeres que viajaban en tercera clase sobrevivieron las menores de 28 años, que viajaban con 4 o menos acompañantes.  
-` `    
+   
 En definitiva, para todos los modelos que creamos la variable Sexo es la más importante y otras variables de importancia han sido la edad, la clase, el número de personas que viajaban juntas.  
 ` `    
 ```{r, echo=FALSE}
@@ -2708,21 +2678,21 @@ rpart.plot(prunedrpart)
 ` `    
 **CONCLUSIONES FINALES**.  
 
+` `  
 Tras realizar una inspección visual, aplicar métodos de estadística inferencial, regresiones y árboles de decisión podemos ver que entre todos los métodos hay consenso en cuanto a los factores que influyeron en la supervivencia o no de los pasajeros del Titanic.    
 
-` `    
-* El sexo de las personas que viajaban tuvo mucha influencia en su supervivencia:` `  
 
-- En caso de los hombres, la supervivencia era mayor para niños.` `  
+* El sexo de las personas que viajaban tuvo mucha influencia en su supervivencia:  
+
+- En caso de los hombres, la supervivencia era mayor para niños.  
 - En el caso de las mujeres, no fue tan importante la edad como la clase en la que viajaban. Las mujeres de primera y segunda clase sobrevivieron en su mayoría.  
-` `    
-* Las personas que viajaban con uno o más acompañantes también sobrevivieron en mayor proporción.` `  
+
+* Las personas que viajaban con uno o más acompañantes también sobrevivieron en mayor proporción.  
 
 ` `    
-
-En definitiva, **el juego de datos nos ayuda a responder el problema/pregunta principal planteada en cuanto a los factores influyentes en la supervivencia del accidente del Titanic**` `  
-` `    
-Los análisis mostrados reflejan qué y cómo pudieron influir los diferentes factores en la supervivencia de los viajeros.` `  
+En definitiva, **el juego de datos nos ayuda a responder el problema/pregunta principal planteada en cuanto a los factores influyentes en la supervivencia del accidente del Titanic**   
+ 
+Los análisis mostrados reflejan qué y cómo pudieron influir los diferentes factores en la supervivencia de los viajeros.   
 
 
 ` `    
@@ -2735,7 +2705,7 @@ Los análisis mostrados reflejan qué y cómo pudieron influir los diferentes fa
 
 **Código** 
 ` `     
-El código empleado en la realización de este proyecto se ha mantenido visible para su potencial estudio y uso si fuera el caso excepto en el apartado de Representación de Resultados (ver archivo Rmd para ver la totalidad del código).` `  
+El código empleado en la realización de este proyecto se ha mantenido visible para su potencial estudio y uso si fuera el caso excepto en el apartado de Representación de Resultados (ver archivo Rmd para ver la totalidad del código).   
 
 ` `  
 
