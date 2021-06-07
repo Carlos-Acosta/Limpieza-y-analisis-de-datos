@@ -24,10 +24,10 @@ Este archivo contiene la totalidad del código utilizado en el presente proyecto
 ## Memoria/Informe de la práctica
 
 Este proyecto dispone de una memoria con información exhaustiva y explicaciones en cuanto a la limpieza y análisis del dataset.<p>
-La memoria se dispone en formato pdf y HTML en la carpeta "Informe", y los nombres de los archivos son:
+La memoria se dispone en formato pdf en la carpeta "Informe", y el nombre del archivo es:
   
 • **GarcesOlga_AcostaCarlos_PRA2.pdf**: Archivo en formato PDF.<p>
-• **GarcesOlga_AcostaCarlos_PRA2.html**: Archivo en formato HTML.<p>
+
   
 ## Juego de datos original
   
